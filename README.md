@@ -1,0 +1,3 @@
+## XFCE4-Panel News Ticker Plugin
+
+Just begin journey with Rust, Gtk, XFCE4 plugins...
