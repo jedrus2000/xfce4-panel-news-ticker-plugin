@@ -1,0 +1,47 @@
+#! /bin/bash
+# This script compile TICKR on win32 then build the installer
+# (by calling build-win32-installer)
+
+runtime="gtk2-win32-full-runtime"
+dlls="dlls"
+libetm_v="0.5.0"
+
+if [ ! -e "$runtime" ]; then
+	echo "You must copy "$runtime" under tickr-0.7.x/"
+	exit 1
+elif [ ! -e "win32_install_stuff/$dlls" ]; then
+	echo "You must copy "$dlls" under tickr-0.7.x/win32_install_stuff/"
+	exit 2
+else
+	cp src/libetm-"$libetm_v"/Makefile-libetm-win32 src/libetm-"$libetm_v"/Makefile
+	cp src/tickr/Makefile-tickr-win32 src/tickr/Makefile
+	cp win32_install_stuff/build-win32-installer src/tickr/
+	cp win32_install_stuff/installer.iss ./
+	cd src/libetm-"$libetm_v"
+	make
+	exit_value1="$?"
+	cd ../tickr
+	if [ "$exit_value1" = 0 ]; then
+		printf "\n=== libetm make: OK ===\n\n"
+		make
+		if [ "$?" = 0 ]; then
+			printf "\n=== tickr make: OK ===\n\n"
+			build-win32-installer
+		else
+			printf "\n=== tickr make: ERROR ===\nPress any key\n\n"
+			read k
+		fi
+		make clean
+	else
+		printf "\n=== libetm make: ERROR ===\nPress any key\n\n"
+		read k
+	fi
+	cd ../libetm-"$libetm_v"
+	make clean
+	cd ../..
+	rm src/libetm-"$libetm_v"/Makefile
+	rm src/tickr/Makefile
+	rm src/tickr/build-win32-installer
+	rm installer.iss
+	exit 0
+fi

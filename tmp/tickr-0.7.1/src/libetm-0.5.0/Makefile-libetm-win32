@@ -1,0 +1,33 @@
+# Makefile for libetm - win32 version
+
+src =	str_mem.c tcp_socket.c error.c misc.c win32_specific.c #dllist.c
+obj =	$(src:.c=.o)
+headers = libetm.h $(src:.c=.h)
+
+CC =	gcc
+
+CFLAGS = -O2 -Wall -Wextra -Wunused-parameter -Wshadow -Wpointer-arith\
+	-ffast-math -pedantic -Wno-variadic-macros -DWIN32_V
+
+all:	libetm.a
+
+$(obj): $(src) $(headers) Makefile
+	$(CC) $(CFLAGS) -c $(src)
+
+libetm.a: $(obj)
+	ar -rs libetm.a $(obj)
+
+.PHONY: install
+install:
+	mkdir -p /usr/include/libetm
+	cp $(headers) /usr/include/libetm/
+	cp libetm.a /usr/lib/
+
+.PHONY: uninstall
+uninstall:
+	rm /usr/include/libetm/$(headers)
+	rm /usr/lib/libetm.a
+
+.PHONY: clean
+clean:
+	rm $(obj) libetm.a

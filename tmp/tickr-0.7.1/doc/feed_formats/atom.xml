@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+
+<feed>
+	<title>FEED_TITLE_(atom)</title>
+	<link href="FEED_LINK"/>
+	<entry>
+		<title>ENTRY_1_TITLE</title>
+		<summary>ENTRY_1_SUMMARY</summary>
+		<link href="ENTRY_1_LINK"/>
+	</entry>
+	<entry>
+		<title>ENTRY_2_TITLE</title>
+		<summary>ENTRY_2_SUMMARY</summary>
+		<link href="ENTRY_2_LINK"/>
+	</entry>
+	<entry>
+		<title>ENTRY_3_TITLE</title>
+		<summary>ENTRY_3_SUMMARY</summary>
+		<link href="ENTRY_3_LINK"/>
+	</entry>
+</feed>

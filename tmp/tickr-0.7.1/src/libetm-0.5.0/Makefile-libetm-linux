@@ -1,0 +1,39 @@
+# Makefile for libetm - Linux version
+
+src =	str_mem.c tcp_socket.c error.c misc.c #dllist.c
+obj =	$(src:.c=.o)
+headers = libetm.h $(src:.c=.h)
+
+INC_DIR = /usr/include/libetm
+LIB_DIR = /usr/lib/libetm
+
+CC =	gcc
+
+CFLAGS = -O2 -Wall -Wextra -Wunused-parameter -Wshadow -Wpointer-arith\
+	-ffast-math -pedantic -Wno-variadic-macros
+
+all:	libetm.a
+
+$(obj): $(src) $(headers) Makefile
+	$(CC) $(CFLAGS) -c $(src)
+
+libetm.a: $(obj)
+	ar -rs libetm.a $(obj)
+
+.PHONY: install
+install:
+	mkdir -p $(INC_DIR)
+	cp $(headers) $(INC_DIR)/
+	chmod -R a+r $(INC_DIR)
+	mkdir -p $(LIB_DIR)
+	cp libetm.a $(LIB_DIR)/
+	chmod -R a+r $(LIB_DIR)
+
+.PHONY: uninstall
+uninstall:
+	rm -r $(INC_DIR)
+	rm -r $(LIB_DIR)
+
+.PHONY: clean
+clean:
+	rm $(obj) libetm.a

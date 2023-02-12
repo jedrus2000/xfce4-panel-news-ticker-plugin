@@ -1,0 +1,2 @@
+#! /bin/bash
+diff -u -r glib-2.26.0 glib-2.26.0-win32-mmtimer > glib-2.26.0-win32-mmtimer.diff

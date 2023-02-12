@@ -1,0 +1,2 @@
+tickr 2>&1 | tee tickr.log
+

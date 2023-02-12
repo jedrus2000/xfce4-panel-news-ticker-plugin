@@ -1,0 +1,29 @@
+#! /bin/bash
+# This script copy stuff and build TICKR win32 installer (by calling
+# installer.iss)
+
+BIN_DIR="tickr-win32-bin"
+IMAGES_DIR="../../images"
+WIN32_INSTALL_STUFF_DIR="../../win32_install_stuff"
+GTK_RUNTIME_DIR="../../gtk2-win32-full-runtime"
+DLLS_DIR=$WIN32_INSTALL_STUFF_DIR"/dlls"
+TXT_FILES_DIR="../.."
+
+cp $IMAGES_DIR/tickr-icon.ico ./
+c:/program\ files/ResHack/reshacker.exe -add tickr.exe, tickr.exe, tickr-icon.ico, ICONGROUP, TICKRICON,
+rm tickr-icon.ico
+mkdir -p $BIN_DIR
+cp tickr.exe $BIN_DIR/
+cp $IMAGES_DIR/tickr-*.png $BIN_DIR/
+cp -r $GTK_RUNTIME_DIR/* $BIN_DIR/
+cp $DLLS_DIR/*.dll $BIN_DIR/
+cp $DLLS_DIR/*.dll.a $BIN_DIR/
+cp -r $DLLS_DIR/libgnutls-win32/* $BIN_DIR/
+cp -r $DLLS_DIR/libfribidi-win32/* $BIN_DIR/
+cp $WIN32_INSTALL_STUFF_DIR/LICENSE $BIN_DIR/
+cp $TXT_FILES_DIR/COPYING $BIN_DIR/
+cp $TXT_FILES_DIR/README $BIN_DIR/
+cp $TXT_FILES_DIR/tickr-url-list $BIN_DIR/
+mkdir -p c:/documents\ and\ settings/manutm/bureau/binaries
+c:/program\ files/inno\ setup\ 5/iscc.exe $TXT_FILES_DIR/installer.iss
+rm -r $BIN_DIR

@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	<channel>
+		<title>FEED_TITLE_(rss1.0)</title>
+		<link>FEED_LINK</link>
+	</channel>
+	<item>
+		<title>ITEM_1_TITLE</title>
+		<description>ITEM_1_DESCRIPTION</description>
+		<link>ITEM_1_LINK</link>
+	</item>
+	<item>
+		<title>ITEM_2_TITLE</title>
+		<description>ITEM_2_DESCRIPTION</description>
+		<link>ITEM_2_LINK</link>
+	</item>
+	<item>
+		<title>ITEM_3_TITLE</title>
+		<description>ITEM_3_DESCRIPTION</description>
+		<link>ITEM_3_LINK</link>
+	</item>
+</rdf:RDF>

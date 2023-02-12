@@ -1,0 +1,20 @@
+[package]
+name = "xfce4-panel-news-ticker-plugin"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "rsnewstickerplugin"
+crate-type = ["staticlib", "cdylib"]
+
+[dependencies]
+gdk-sys = "0.17.0"
+glib = "0.17.0"
+glib-sys = "0.17.0"
+gobject-sys = "0.17.0"
+gtk = "0.17.0"
+gtk-sys = "0.17.0"
+libc = "0.2.139"
+reqwest = "0.11.14"
+rss = "2.0.2"

@@ -1,0 +1,3 @@
+This is only a tiny lib with a few functions I use a lot.
+
+To compile for win32, you must use the -DWIN32_V flag.

@@ -174,3 +174,8 @@ dkms.conf
 
 /xfce4-panel-news-ticker-plugin.iml
 /.idea/
+
+
+# Added by cargo
+
+/target

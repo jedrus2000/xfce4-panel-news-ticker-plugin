@@ -1,0 +1,50 @@
+# Makefile for TICKR - GTK-based Feed Reader - Linux version
+# TODO: This rarely-used Makefile has not been tested for ages, still working ?
+
+src = tickr_main.c tickr_resource.c tickr_render.c tickr_params.c\
+	tickr_clock.c tickr_feedparser.c tickr_list.c tickr_feedpicker.c\
+	tickr_prefwin.c tickr_otherwins.c tickr_misc.c tickr_helptext.c\
+	tickr_opml.c tickr_http.c tickr_connectwin.c tickr_quickfeedpicker.c\
+	tickr_quicksetup.c tickr_check4updates.c tickr_error.c tickr_tls.c
+
+obj = $(src:.c=.o)
+
+CC = gcc
+
+CFLAGS = -O2 -Wall -Wextra -Wunused-parameter -Wshadow -Wpointer-arith\
+	-ffast-math -pedantic -Wno-variadic-macros\
+	-Wno-deprecated-declarations -Wno-format -Wno-format-truncation\
+	`pkg-config --cflags gtk+-2.0`\
+	xml2-config --cflags` -I/usr/local/include\
+	`pkg-config --cflags gnutls`\
+	`pkg-config --cflags fribidi`\
+#-Wno-deprecated-declarations for boring GTK+2 "'GTypeDebugFlags' is deprecated"
+
+LIBS = ../libetm-0.5.0/libetm.a `pkg-config --libs gtk+-2.0`\
+	`xml2-config --libs`\
+	`pkg-config --libs gnutls`\
+	`pkg-config --libs fribidi`
+
+all: tickr
+
+$(obj): $(src) news.h Makefile
+	$(CC) $(CFLAGS) -c $(src)
+
+tickr: $(obj)
+	$(CC) -o tickr $(obj) $(LIBS)
+
+.PHONY: install
+install:
+	sudo cp tickr /usr/bin/
+	sudo mkdir -p /usr/share/tickr
+	sudo mkdir -p /usr/share/tickr/pixmaps
+	sudo cp ../../images/tickr-*.png /usr/share/tickr/pixmaps/
+
+.PHONY: uninstall
+uninstall:
+	sudo rm /usr/bin/tickr
+	sudo rm /usr/share/tickr/pixmaps/tickr-*.png
+
+.PHONY: clean
+clean:
+	rm -f $(obj) tickr

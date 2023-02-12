@@ -1,0 +1,697 @@
+tickr version 0.7.1
+-------------------
+
+- New clock_alt_date_form option: Use alternative date format, ie
+  'Mon 01 Jan' instead of 'Mon Jan 01'. (Jun 29 2021)
+
+- A few things in tickr_http.c, tickr_feedpicker.c, help text and man
+  page. (Apr 20 2021)
+
+- In tick_prefwin.c, 'reset all settings' doesn't fully update Tickr
+  appearance when reopening dialog (need 'apply'), so no more reopening.
+  (Apr 18 2021)
+
+- New function tickr_feepicker.c/check_and_update_feed_url() to simplify
+  code. Help to fix segfaults in:
+    - tickr_feepicker.c/add_feed_to_flnode_and_list_store()
+    - tickr_feepicker.c/manage_list_and_selection()
+    - tickr_opml.c/get_opml_selected_element()
+  (LP: #1272129) (Apr 17 2021)
+
+- Try to better document/comment tickr_http.c/fetch_resource(), which
+  was a bit confusing. (Apr 17 2021)
+
+- OPML import: feed URLs updated if moved-permanently redirects.
+  (Apr 17 2021)
+
+- Complete OPML export format: opml v = 2.0, <outline> has only text and
+  xmlUrl attributes, for maximum comptability. (Apr 16 2021)
+
+- Fix icon location in tickr.dektop. (Apr 15 2021)
+
+- When sorting feed list (by url), now compare strings after ":", with
+  get_url_beyond_scheme(). (Apr 15 2021)
+
+- In tickr_resource.c/format_resource_str(), no need to 'translate'
+  html entities anymore, so some code removed. The issue was related
+  to an old version of Libxml2. Seems tickr_html_entities.h is now
+  useless. (Apr 14 2021)
+
+- Remove testing type="rss" when importing OPML file in tickr_opml.c,
+  plus other issues. (Sep 12 2020)
+
+- We want command line args "--instance-id=" and "--no-ui" to be valid
+  too (as are all other args and options) in tickr_main.c. (Sep 12 2020)
+
+- Install tickr-icon.png also in /usr/share/icons/hicolor/64x64/apps/
+  (Jun 17 2020)
+
+
+tickr version 0.7.0
+-------------------
+
+- Fix linking issues in tickr-0.7.0/src/tickr/Makefile.am:
+    tickr_LDADD = ../libetm-0.5.0/libetm.a $(GTK2_LIBS) $(XML2_LIBS)\
+    $(GNUTLS_LIBS) $(FRIBIDI_LIBS) -lm (Jun 13 2020)
+
+- Add missing
+    'libetm_a_LDFLAGS = -lm'
+  in tickr-0.7.0/src/libetm-0.5.0/Makefile.am. (Jun 11 2020)
+
+- Fix segfaults and *freeze* with FList's when adding invalid or
+  unreachable URLs (in tickr_feepicker.c). (May 31 2020)
+
+- Get correct link offsets with reverse scrolling. (May 31 2020)
+
+- Fix compiling issues for win32 version. (May 25 2020)
+
+- Fix incorrect visual display of bidi text with reverse scrolling.
+  Will need more feedback anyways. (May 25 2020)
+
+- Fix the flickering-every-500-ms issue on Linux Mint 18 Cinnamon, as
+  well as the weird on screen square artifact, in tickr_main.c:
+  update_win_dims_and_loc(), thanks to Trevor Hemsley contribution.
+  (May 11 2020)
+
+- Add time of OPML export (as a comment) in tickr_opml.c. (Dec 17 2018)
+
+- In tickr_feedpicker.c, change
+    "Enter (rank and) URL:"
+  to less confusing
+    "<b>New Feed</b>  ->  Enter (rank and) URL:".
+  (Mar 19 2018)
+
+- Static global var shift_counter now member of TickerEnv struct.
+  (May 23 2017)
+
+- Fix no more functionnal check_for_updates() (https ? / website
+  migration ?) (May 21 2017)
+
+- Fix get_resource()->link_and_offset big issues. (May 17 2017)
+
+- Fix segfaults in feed picker win -> add/update with unreachable or
+  invalid URLs. (Mar 15 2017)
+
+- Replace __FUNCTION__ with __func__ in all src files, to fix new
+  -Wpedantic warnings about non-standard predefined identifiers in gcc5.
+  (Feb 12 2017)
+
+- Add donate button in about win. (Jan 15 2017)
+
+- Fix many program startup issues. (Dec 12 2016)
+
+- get_new_url() renamed manage_list_and_selection(). (Dec 12 2016)
+
+- Fix UTF-8 encoding related issues. (Dec 11 2016)
+
+- Remove 'cutline-delimiter' param, not used/needed anymore.
+  (Nov 29 2016)
+
+- New params: 'clocksec', 'clock12h' and 'clockdate'. (Nov 25 2016)
+
+- Now using logging macros from libetm. (Nov 18 2016)
+
+- New 'connect-timeout' and 'sendrecv-timeout' CLI options are now
+  settings (saved in config file). Add them in connection settings win.
+  (Oct 30 2016)
+
+- Add 'full settings' and 'connection settings' buttons in quick
+  settings wins, and 'connection settings' button in full settings wins.
+  (Oct 27 2016)
+
+- New 'override_redirect' param (*very* experimental). (Oct 26 2016)
+
+- Remove unusable 'fullscreen' param. (Oct 26 2016)
+
+- Allow authentication username and proxy username to contain spaces.
+  (Oct 24 2016)
+
+- Try to fix flickering on Linux Mint 18 Cinnamon because of calling
+  update_win_dims_and_loc() every 500 ms. Not working. (Aug 15 2016)
+
+- New *experimental* 'fullscreen' param. (Apr 5 2016)
+
+- Add HTTP status code 410: Gone. (Mar 31 2016)
+
+- info_win_wait() renamed info_win_no_block(), which is less confusing,
+  plus BLOCK/NO_BLOCK helpers for warning(). (Mar 20 2016)
+
+- Improved big_error() and warning(). (Mar 19 2016)
+
+- Fix a few reverse scrolling issues. Still a lot to do. (Feb 25 2016)
+
+- Reload delay now up to 1440 mn = 24 h. 0 = never force reload.
+  Actually, in multiple selections mode, all feeds are always reloaded
+  sequentially, because there is no caching mechanism involved.
+  (Nov 22 2015)
+
+- Segfault signal (SIGSEGV) handling. (Sep 24 2015)
+
+- Change 'sfpickercloseswhenpointerleaves' option name to
+  'sfeedpickerautoclose'. (Sep 22 2015)
+
+- Change 'mousewheelscroll' option name to 'mousewheelaction'.
+  (Sep 22 2015)
+
+- Former "Preferences" dialog renamed to "Full Settings", and new easy
+  setup dialog called "Preferences". Add tooltips. Also a few changes
+  and fixes. (Sep 22 2015)
+
+- New 'current feed' button in feed organizer. Also add tooltips.
+  (Sep 21 2015)
+
+- Find/use default browser on Linux. (Sep 21 2015)
+
+- Add default response parameter to question_win() and set default
+  responses. (Sep 21 2015)
+
+- HTTPS support with GnuTLS. (Sep 1 2015)
+
+- load_resource() -> load_resource_from_selection() (first name is
+  confusing/not descriptive enough). (Aug 24 2015)
+
+- New 'connect-timeout' and 'sendrecv-timeout' CLI only options, which
+  override default timeout values, if proxy or slow internet link.
+  Thanks to G4JC for his patch. (LP: #1475797) (Jul 20 2015)
+
+- New 'dumperrorcodes' CLI arg. (Mar 20 2015)
+
+- Now parse port numbers in URLs. (Mar 4 2015)
+
+- Implement reverse scrolling (ie L to R) option. (Mar 3 2015)
+
+- New 'dumpconfig' CLI arg. (Nov 20 2014)
+
+- New libetm l_str_insert_at_b() function. (Nov 12 2014)
+
+- In tickr_main.c: update_pixmap_from_opened_stream(), add
+    if (resrc->fp != NULL)
+  before
+      fseek(resrc->fp, 0, SEEK_SET);
+  to fix segfault when trying to open an invalid resource or a
+  non-existing file from CLI. (Nov 8 2014)
+
+- Improved libetm error hanling and new tickr_error.c/h modules.
+  (Nov 6 2014)
+
+- In check_main_win_always_on_top(), change:
+    gtk_window_set_keep_above(GTK_WINDOW(env->win), BOOLEAN);
+  to:
+    gtk_window_set_keep_above(GTK_WINDOW(env->win), BOOLEAN);
+    gdk_window_set_keep_above(GDK_WINDOW(env->win->window), BOOLEAN);
+  to (try to) fix always-on-top issues on some DE, like:
+  https://aur.archlinux.org/packages/tickr/
+  Need feedback to know if this actually makes a difference.
+  (Oct 30 2014)
+
+- Quick hack to fix remaining 1 pixel wide line when enabling then
+  disabling left clock, because then vbox_clock/drwa_clock min size is
+  still 1x1 (not 0x0) and is the first widget packed in main_hbox.
+  So, when no clock is set, we make sure the 'empty clock widget' is
+  always on the right side, ie we do:
+  gtk_box_reorder_child(GTK_BOX(main_hbox), vbox_clock, 1)
+  (Oct 30 2014)
+
+- When adding a feed to the feed list, new option to force an
+  invalid/unreachable one to be kept anyways. (Oct 22 2014)
+
+- Add IS_FLIST() test in tickr_feedpicker.c:
+  add_feed_to_flnode_and_list_store() to fix f_list_search() invalid
+  node error, when trying to add one feed to an *empty* list.
+  (LP: #1272129) (Oct 22 2014)
+
+- New free_all() function to release all allocated memory before
+  exiting. (Oct 21 2014)
+
+- Fix maximizing feed organizer window doesn't expend scrolled window:
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), sc_win,
+    TRUE, TRUE, 0);
+  (Oct 18 2014)
+
+- Improved long strings formatting in info_win() with
+  insert_newlines_if_too_long(). (Oct 17 2014)
+
+- Change g_remove() to g_unlink() because we deal only with files.
+  Also add a silly hack to prevent issues with win32 appdata dir user
+  permissions unholy mess. (Oct 17 2014)
+
+- 'disable screen limits' option now applies to x position too.
+  (Sep 22 2014)
+
+- Add 'marked items' stuff in UI and params. (Sep 17 2014)
+
+- Change function names in menu_item array from function_name2 to
+  function_name0 because function_name0 are always called before
+  function_name so using 2 is just confusing. (Sep 11 2014)
+
+- A few changes in tickr_feedpicker.c (line 393). (May 15 2014)
+
+- Fix 'disablepopups' option not effective on 'no-ui' option and allow
+  'no-ui' option to be effective if 1st *or* *2nd* arg. (May 2 2014)
+
+- Fix a few build/compile issues on win32. (Apr 30 2014)
+
+- Stream sockets API moved to libetm. (Nov 10 2013)
+
+- New libetm 'zboolean' type. (Nov 8 2013)
+
+- Not-working-as-expected and never-used win_with_spinner() stuff now
+  commented out. (Oct 14 2013)
+
+- Feed title / item title / item description pages removed (commented
+  out) from quick setup. (Oct 5 2013)
+
+- "Open Feed" in menu changed to "Feed Organizer" in tickr_main.c and
+  "Feed Picker" window title changed to "Feed Organizer" in
+  tickr_feedpicker.c. (Oct 5 2013)
+
+
+tickr version 0.6.4
+-------------------
+
+- In pref windows, some setting changes (like 'read n items per feed')
+  need the stream to be reloaded, so now we use current_feed() instead
+  of update_pixmap_from_opened_stream(). (May 23 2013)
+
+- Fix 'quick feed picker (selected feeds) closes when pointer leaves win
+  area' and implement it as a setting. (May 22 2013)
+
+- In pref window, disabling screen limits updates win_y and win_w limits
+  on the fly. (May 22 2013)
+
+- Max options number now set to 128. (May 21 2013)
+
+- Pref win changes:
+  - remove 'system' colors buttons
+  - increase gtk table row spacings
+  (May 14 2013)
+
+- If gradient bg set, compute text shadow color no longer from bg_color
+  but from gradient. (May 14 2013)
+
+- Quick feed picker (selected feeds) closes when pointer leaves win
+  area. Plus: quick feed picker opened *also* by Ctrl + mouse
+  right-click. (May 4 2013)
+
+- Complete RSS 1.0 support (Closes: #688099) and fix/rewrite a few
+  things in feed parser code. (May 3 2013)
+
+- In tickr_feedparser.c: ending '\n' removed when adding string to
+  XML_DUMP (left when adding string to XML_DUMP_EXTRA). (May 1 2013)
+
+- Replace update_win_dims() with update_win_dims_and_loc() so that if
+  ticker location happens to be wrong, it's always and quickly reset.
+  (Apr 30 2103)
+
+- Add RSS 1.0 (RDF) support. (Apr 30 2013)
+
+- In tickr_main.c / main(), change:
+    gtk_widget_show_all(env->win);
+    update_win_dims();
+    gtk_main();
+  to:
+    gtk_widget_show_all(env->win);
+    gtk_widget_set_size_request(env->win, 1, 1);
+    gtk_window_resize(GTK_WINDOW(env->win), 1, 1);
+    gtk_main();
+  to try to get rid of "ghost" square window at startup (but is this
+  fully effective ?)
+  Also change:
+    gtk_widget_set_size_request(env->win, 0, 0)
+  to:
+    gtk_widget_set_size_request(env->win, 1, 1)
+  in update_win_dims(). (Apr 29 2013)
+
+- In feed picker - multiple selection mode: start reading selection with
+  highlighted feed - more exactly url in entry (if any) / first one
+  otherwise. (Apr 29 2013)
+
+- Remove (useless ?) app version number from exported OPML feed list
+  title. (Apr 25 2013)
+
+- Only a little editor issue - some editors get confused (geany colors
+  get confused) by things like:
+    THIS_IS_A_#DEFINE"____string____"
+  so now we put a space in between, like this:
+    THIS_IS_A_#DEFINE "____string____"
+  (Apr 25 2013)
+
+- If win_w = 0, win_w = detected screen width (same as 'full width' but
+  from command line). (Apr 24 2013)
+
+- Fix xml namespaces issue in tickr_feedparser.c, when, for instance,
+  'media:title' exists along with 'title' and we then get 'title' twice.
+  Now, we make sure no extra namespace is used before comparing strings
+  with 'title', 'description', etc. (April 22 2013)
+
+- Fix stupid bug in format_resource() 'translate html entities' when '&'
+  alone is detected (ie without a following ';'). Also fix 'translating'
+  numerical entities with leading '0' in value string. (Apr 21 2013)
+
+- New option 'disablescreenlimits' which allows win_y and win_w to be
+  greater than screen dimensions. (Apr 13 2013)
+
+- A few default settings changed. (Apr 13 2013)
+
+- Gradient bg. (Apr 13 2013)
+
+
+tickr version 0.6.3
+-------------------
+
+- Fix messy update_everything() function and add new
+  update_pixmap_from_opened_stream() function, used in tickr_mainc.c and
+  tickr_prefwin.c. (Feb 4 2013)
+
+- All *string* values are now saved inclosed in a pair of " or '.
+  (This avoid getting trailing whitespaces removed by some editors, and
+  other weird things like that.) When read, enclosing " or ' are
+  removed, so backward compatibility is preserved. (Feb 3 2013)
+
+- install-on-win32 script renamed build-on-win32 (for accuracy sake.)
+  (Oct 30 2012)
+
+- Fix some confusion about win_transparency in tickr_param.c. Actually,
+  double value from 0.1 to 1.0 inside program / int value from 1 to 10
+  inside config file or as command line argument. (? 2012)
+
+- Fix settings import doing nothing (regression bug). (Sep 20 2012)
+
+- In show_resource_info(), fix URL link and GTK label. (Sep 20 2012)
+
+- Move and set:
+    #define N_STR_MAX		8
+    #define STR_MAXLEN		FILE_NAME_MAXLEN	(128 previously)
+  and remove duplicates. (Sep 19 2012)
+
+- In tickr_feedpicker.c, add:
+    if (IS_FLIST(flist_bak))
+      (  f_list_free_all(flist_bak);  )
+  to fix: list crash (f_list_free_all(): Invalid node in list) after
+  adding a feed to an empty list (when clicking OK). (Sep 18 2012)
+
+- Rename (#define RESOURCE_DUMP) APP_CMD"-resrc-dump" ->
+  APP_CMD"-resrc-dump.xml" (because it *is* an XML file.) (Sep 15 2012)
+
+- Little changes in big_error() text. (Aug 14 212)
+
+
+tickr version 0.6.2
+-------------------
+
+- Non standard feed rank support in OPML file. (Jul 15 2012)
+
+- Add new optional 'feed re-ordering by user' feature. (Jul 15 2012)
+
+- Add in libetm-0.4.4/str_mem.c/h: (int) str_is_num(const char *) and
+  (int) str_is_blank(const char *). (Jul 15 2012)
+
+- In feed picker win, 'enter' in (rank_/url_)entry launches 'add/upd'
+  (GTK_RESPONSE_ADD) instead of 'ok (single)' (GTK_RESPONSE_SINGLE).
+  (Jul 3 2012)
+
+- Question at program start-up about new feed list format conversion:
+  if version = 0.6.2 and feed list exists and feed list backup doesn't
+  exist, create backup and convert to new format. (Jul 2 2012)
+
+- In tickr_feedpicker.c: fix 'cancel' action. (Jun 29 2012)
+
+- New func FList *f_list_clone(FList *) in tickr_list/c/h. (Jun 29 2012)
+
+- Use GTK_RESPONSE_CANCEL_CLOSE only. (Jun 29 2012)
+
+- In compute_surface_and_win(), remove:
+    if (prm->icon_in_taskbar == 'n')
+      gtk_window_deiconify(GTK_WINDOW(env->win));
+  from update_win_dims() (why was it there?) to fix 'tickr keeps
+  stealing focus' bug. Also replace params_have_been_changed() with
+  win_params_have_been_changed(). (LP: #900759, #951452, #1017107)
+  (Jun 28 2012)
+
+- Fix (regression bug) segfault which occurs when opening text file and
+  attempting to 'format_resource()' 'not-generated-if-resource is-file'
+  XML_DUMP_EXTRA file. (Jun 20 2012)
+
+- Libetm version 0.4.3 -> 0.4.4 (see below.) (Jun 19 2012)
+
+- Add get_appdata-dir_w() in libetm-0.4.4:win32_specific.c and
+  get_appdata_dir_utf8() in tickr_resource.c to fix non-ascii (for
+  instance cyrillic) user name in app data dir issue on win32.
+  Also remove seemingly useless g_win32_locale_filename_from_utf8()
+  stuff on win32. (Jun 19 2012)
+
+- If 'item title' and 'item description' both unchecked in pref win,
+  warn about 'pointless' setup and ask for confirmation before saving
+  config. (Jun 18 2012)
+
+- Add new TickerEnv member (int) mouse_x_in_drwa used to continuously
+  tracks (guess what?) mouse x position. Now we have:
+  - tooltips with descriptions when ticker displays only titles
+  and
+  - tooltips with titles when ticker displays only descriptions.
+  (Jun 14 2012)
+
+- Add fp_extra stuff in tickr_feedparser.c to get item titles /
+  descriptions (in tooltips and others) when they are no displayed.
+  (Jun 12 2012)
+
+- Remove tmp files when exiting tickr_resource.c:format_resource().
+  (Jun 12 2012)
+
+- Add env->c_surf test in shift2left_callback(). (LP: #1011316)
+  (Jun 11 2012)
+
+
+tickr version 0.6.1
+-------------------
+
+- Add: 'quick setup' thing (in tickr_quicksetup.c) which is launched at
+  program startup if config file doesn't exist. (Jun 4 2012)
+
+- Little improvements in layout of 'feed picker win' and 'preferences
+  win'. (Jun 3 2012)
+
+- Fix a segfault that happens when trying to export params and no config
+  file exists yet. (Jun 3 2012)
+
+- Make several windows that should not be resized by user, unresizable.
+  (Jun 3 2012)
+
+- Fix Launchpad bug #1007346: When 'window always-on-top' is disabled,
+  'visible on all user desktops' stops working. (Jun 1 2012)
+
+- If mouse wheel scrolling applies to speed (or feed), then Ctrl + mouse
+  wheel scrolling applies to feed (or speed.) (May 31 2012)
+
+- No real code changes in libetm, only in comments, so no need for a new
+  version number. (May 31 2012)
+
+- Update tickr_helptext.c and tickr.1 (man page.) (May 30 2012)
+
+- Add new cli option 'no-ui' (similar to 'instance-id') used by new
+  IF_UI_ALLOWED macro and remove all #if USE_GUI occurences.
+  (May 28 2012)
+
+- In tickr_list.c, free listfname before using it. Fixed by swapping 2
+  lines:
+    warning(FALSE, 4, "Can't save URL list ", listfname, ...);
+    l_str_free(listfname);
+  (May 28 2012)
+
+- Use/add #define
+    FONT_MAXLEN			68
+    ARBITRARY_TASKBAR_HEIGHT	25
+  to replace a few 'magic' numeric values. (May 21 2012)
+
+- Rename: rss_title/description(_delimiter) ->
+    item_title/description(_delimiter)
+  then add new param: feed_title(_delimiter). Now we have:
+  feed title / item title / item description. (May 20 2012)
+
+- Use table in resource properties window. (May 2O 2012)
+
+- Fix a bug in f_list_load_from_file() in tickr_list.c which incorrectly
+  retrieves any feed title  string containing TITLE_TAG_CHAR when
+  TITLE_TAG_CHAR has not been removed from string first, for instance:
+  'NYT > World' -> ' World'. (May 2O 2012)
+
+- New param: disable left-click. (May 2O 2012)
+
+- Add 'check for updates' feature. (May 19 2012)
+
+- Launch 'import OPML file' if feed list doesn't exist. (May 18 2012)
+
+- Remove code changing get_params()->disable_popups value in
+    START/END_PAUSE_TICKER_WHILE_OPENING
+  macros which prevents this setting to be saved and add
+    START/END_PAUSE_TICKER_ENABLE_POPUPS_WHILE_OPENING
+  new macros. Which ones to use depends on context. (May 10 2012)
+
+- Move:
+    #ifdef G_OS_WIN32
+    extern FILE	*stdout_fp, *stderr_fp;
+    #endif
+  from *.c into tickr.h. (May 9 2012)
+
+- Default always-on-top setting changed to 'n' (so that tickr is not
+  intrusive by default.) (May 5 2012)
+
+
+tickr version 0.6.0
+-------------------
+
+- Complete quick_feed_picker() stuff in tickr_quickfeedpicker.c.
+  (March 7 2012)
+
+- Swap win32 log files every hour to prevent generating huge ones.
+  Finally fix an old bug on win32. (March 5 2012)
+
+- Several little improvements/fixes in tickr_feedpicker.c. (March 5 2012)
+
+- New type FList (feed doubly-linked list) and associated functions
+  f_list_*() in tickr_list.c. Will replace confusing: char url_array[] /
+  char *p_url[] / char **p_url stuff in: tickr_main.c, tickr_feedpicker.c,
+  tickr_opml.c and tickr_resource.c. (March 5 2012)
+
+- Renaming 2 src files:
+  - tickr_rss.c -> tickr_feedparser.c
+  - tickr_rsswin.c -> tickr_feedpicker.c
+  (Feb 16 2012)
+
+- Add new func: win_with_progress_bar() (in tickr_otherwins.c) and use
+  it in feed list import thing (in tickr_opml.c) instead of
+  not-spinning-as-expected win_with_spinner(). (Feb 15 2012)
+
+- When opening the feed picker dialog, highlight and scroll to current
+  feed, plus several extra fixes and tweaks (in tickr_rsswin.c.)
+  (Feb 14 2012)
+
+- Add new func: highlight_and_go_to_row() (in tickr_quickfeedpicker.c.)
+  (Feb 14 2012)
+
+- Add new func: get_feed_index_in_selection() (in tickr_resource.c.)
+  (Feb 14 2012)
+
+- Add new module and func: tickr_quickfeedpicker.c: quick_feed_picker().
+  (Feb 13 2012)
+
+- Add new func: question_win_at(). (Feb 13 2012)
+
+- Move 'Import/Export Preferences' from 'File' to 'Edit' in menu layout.
+  (Feb 13 2012)
+
+- Check/improve tickr_socket.c code and move typedefs, prototypes, error
+  codes, ... for tickr_socket.c into tickr_socket.h for modularity sake.
+  (Feb 12 2012)
+
+- Pause tickr (on mouse-over AND) when popup menu is opened.
+  (Feb 12 2012)
+
+- Change big_error() function (and prototype in libetm-0-4.3) to handle
+  variable number of args / change warning() the same way.
+  (Feb 12 2012)
+
+- Add new func: try_str_to_utf8() in tickr_rss.c
+  -> try to fix string when utf-8 validation fails. (Feb 9 2012)
+
+- Add new func: remove_trailing_whitespaces_from_str(char *) in
+  libetm-0.4.3/str_mem.c. (Feb 5 2012)
+
+- Change SEND_RECV_TIMEOUT to SEND_RECV_TIMEOUT_SEC and
+  SEND_RECV_TIMEOUT_USEC. (Feb 3 2012)
+
+- Change main window title:
+  'app name and version num  |  feed title / file name'
+  ->
+  'feed title / file name  |  app name and version num'
+  (Jan 21 2012)
+
+- In libetm-0.4.3:
+  - Compile with win32_specific.c only on win32 (fix empty unit
+    warning.)
+  - get_libetm_version() (function name modified.) (Jan 19 2012)
+
+- Fix a typo in debian/control Build-Depends:
+  'debhelper (>= 7.O.50~)' instead of 'debhelper (>= 7.0.50~)'
+  which only shows up when trying to build for Lucid. (Dec 30 2011)
+
+- Split tickr_http.c into tickr_http.c and tickr_socket.c. (Dec 19 2011)
+
+- libetm-0.4.2 -> libetm-0.4.3:
+  Replace KB, MB, GB, TB with KiB, MiB, GiB, TiB. (Dec 18 2011)
+
+
+tickr version 0.5.5
+-------------------
+
+- Implement new parameter: <mouse wheel scrolling applies to:
+  s = ticker-speed / f = feed-in-list / n = none>.
+
+- Set <ticker pause on mouse-over> as optional.
+
+- Select/highlight and scroll to added URL in the list window.
+  (Dec 17 2011)
+
+- Split compute_surface_and_win() code into compute_surface and
+  compute_win, because the later is not always necessary. When
+  window-always-on-top is disabled, compute_win needs to be run only
+  twice at program startup (ie once after gtk_widget_show_all() has been
+  called), then whenever params are changed, but not every time a new
+  feed is loaded.
+
+- Add preferences (settings) importing/exporting feature.
+
+- 'file' scheme support added in tickr_http.c -> enables reading *and*
+  xml-processing of (local) text files (wheras 'open text file' *only*
+  read them.) (Dec 16 2011)
+
+- 'HTTPS not supported' handling/warning added in tickr_http.c (fix bug:
+  program freezes with HTTP redirects to HTTPS.)
+  (Dec 14 2011)
+
+- xml 'quick check' in tickr_http.c:format_quick_check() don't reject
+  anymore valid (?) feeds not starting with '<?xml' (like google news.)
+  (Dec 13 2011)
+
+- A few little changes in libetm-0.4 -> libetm-0.4.2. (Dec 12 2011)
+
+- Use mouse wheel to go to previous/next feed. (Dec 11 2011)
+
+- Hide passwords in connection settings window. (Dec 8 2011)
+
+- Pause ticker and show feed title in tooltip on mouse-over. (Dec 3 2011)
+
+- Renaming all source files: news_*.c/h -> tickr_*/c/h. (Nov 30 2011)
+
+
+tickr version 0.5.4 - Nov 8 2011
+--------------------------------
+
+- Fix sort_url_list(EMPTY_LIST) falsly returning one element list
+  (in news_list.c.) Now, program doesn't hang anymore if lauched with no
+  feed URLs selected.
+
+- Add in news_main.c: shift2left_callback():
+  env->suspend_rq = TRUE / (cairo drawing code) / env->suspend_rq = FALSE
+
+- Tickr fails to build with ld --as-needed (recently-set-as-default
+  linker flag) because libraries must be placed after objects needing
+  theirs symbols.
+  To fix that, we use autoconf macro PKG_CHECK_MODULES(GTK2, gtk+-2.0, ,)
+  and PKG_CHECK_MODULES(XML2, libxml-2.0, ,) in configure.ac, and we
+  may so remove `pkg-config --libs GTK+-2.0' and `xml-config --libs' from
+  src/tickr/Makefile.am.
+
+
+========================================================================
+- NEWS has been renamed TICKR as it is now in Debian Sid (unstable)
+  Last stable version number for News is 0.5.2
+  First stable version number for Tickr is 0.5.3
+
+- changes in news v0.5.3~beta1: prevent connection settings window from
+  showing when popups are disabled
+
+- tickr v0.5.3 doesn't bring many changes/fixes besides program renaming
+  and <prevent connection settings window from showing when popups are
+  disabled>
+========================================================================

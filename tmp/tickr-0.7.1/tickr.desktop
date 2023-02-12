@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Tickr - Feed Reader
+Name[en_US]=Tickr - Feed Reader
+Exec=/usr/bin/tickr
+Icon=/usr/share/icons/hicolor/64x64/apps/tickr-icon.png
+Comment=GTK-based highly graphically-customizable Feed Ticker
+Categories=GTK;Network;News;
+Terminal=false

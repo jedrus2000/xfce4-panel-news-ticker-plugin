@@ -1,0 +1,2 @@
+To change Tickr user interface font on Windows (and also all GTK apps that
+you may use), edit and copy .gtkrc-2.0 in 'C:\Documents and Settings\USER_NAME\'

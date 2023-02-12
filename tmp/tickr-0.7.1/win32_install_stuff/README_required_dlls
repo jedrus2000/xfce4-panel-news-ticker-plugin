@@ -1,0 +1,15 @@
+dlls to be copied here (win32_install_stuff/)
+
+=== libxml2-2.dll.a version 2.7.8 ===
+from http://xmlsoft.org/sources/win32/libxml2-2.7.8.win32.zip
+also need to copy libxml2-2.7.8.win32 to C:/MinGW/msys/1.0/home/manutm/src/
+
+=== libglib-2.0-0.dll ===
+glib-2.26.0 patched to use timeGetTime() instead of
+GetSystemTimeAsFileTime() in order to get a much better highest resolution
+value
+-> from 15 ms to a few ms
+
+=== libgnutls-win32/* ===
+gnutls-3.4.1-w32
+(from ftp://ftp.gnutls.org/gcrypt/gnutls/w32/)

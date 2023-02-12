@@ -1,0 +1,325 @@
+.TH TICKR 1 "Apr 20, 2021"
+.SH NAME
+.B Tickr
+- GTK-based highly graphically-customizable Feed Ticker.
+.SH SYNOPSIS
+.B tickr
+[\-help, \-h, \-? / \-version, \-v / \-license, \-l]
+.br
+[\-dumpfontlist / \-dumpconfig / \-dumperrorcodes]
+.br
+[\-instance\-id=n / \-no\-ui]
+.br
+[\-connect\-timeout=n / \-sendrecv\-timeout=n]
+.br
+[options (\-name[=value])...]
+.br
+[resource (URL or file name)]
+.SH DESCRIPTION
+.B Tickr
+is a GTK-based RSS/Atom Reader that displays feeds as a smooth
+scrolling line on your Desktop, as known from TV stations. Open feed
+links in your favourite Browser. Graphics are highly customizable.
+.SH OPTIONS
+.TP
+.B help
+Get help page
+.TP
+.B version
+Print out version number
+.TP
+.B license
+Print out license
+.TP
+.B dumpfontlist
+Send list of available fonts to stdout
+.TP
+.B dumpconfig
+Send content of config file to stdout
+.TP
+.B dumperrorcodes
+Send error codes and strings to stdout
+.TP
+.B instance\-id=n
+n = 1 to 99 - Use this when launching several instances simultaneously,
+each instance using its own config and dump files (to be effective,
+instance\-id must be the 1st argument)
+.TP
+.B no\-ui
+Disable opening of UI elements which can modify settings and/or URL
+list/selection (to be effective, no\-ui must be the 1st or 2nd argument)
+.TP
+.B \-connect\-timeout=n
+n = 1 to 60 (seconds) - Override default connect timeout value
+(= 5 seconds), useful if proxy or slow internet link
+.TP
+.B \-sendrecv\-timeout=n
+Same as above for send/recv timeout (default value = 1 second)
+.TP
+.B delay=n
+Delay in milliseconds (-> speed = K / delay)
+.TP
+.B shiftsize=n
+Shift size in pixels (-> speed = K x shift size)
+.TP
+.B fgcolor=#rrggbbaa
+Foreground 32-bit hexa color
+.TP
+.B bgcolor=#rrggbbaa
+Background 32-bit hexa color
+.TP
+.B setgradientbg=[y/n]
+Set gradient background
+.TP
+.B bgcolor2=#rrggbbaa
+Background 32-bit hexa color2
+.TP
+.B fontname='fontname'
+Font name
+.TP
+.B fontsize=n
+Font size (can't be > 200)
+.TP
+.B disablescreenlimits=[y/n]
+Allow win_x, win_y and win_w to be greater than screen dimensions
+.TP
+.B win_x=n
+Window position - x
+.TP
+.B win_y=n
+Window position - y
+.TP
+.B win_w=n
+Window width
+.TP
+.B win_h=n
+Window height (compute font size if > 0)
+.TP
+.B windec=[y/n]
+Window decoration
+.TP
+.B alwaysontop=[y/n]
+Window always-on-top
+.TP
+.B fullscreen=[y/n]
+Fullscreen mode (experimental)
+.TP
+.B wintransparency=n
+Actually window opacity from 1 to 10 (0 = none -> 10 = full)
+.TP
+.B iconintaskbar=[y/n]
+Icon in taskbar
+.TP
+.B winsticky=[y/n]
+Visible on all user desktops
+.TP
+.B shadow=[y/n]
+Apply shadow to text
+.TP
+.B shadowoffset_x=n
+Shadow x offset in pixels
+.TP
+.B shadowoffset_y=n
+Shadow y offset in pixels
+.TP
+.B shadowfx=n
+Shadow effect (0 = none -> 10 = full)
+.TP
+.B linedelimiter='str'
+String to be appended at end of line
+.TP
+.B specialchars=[y/n]
+Enable or disable special characters. This is only useful when resource
+is a file, not an URL
+.TP
+.B newpgchar=c
+\'New page' special character
+.TP
+.B tabchar=c
+\'Tab' (8 spaces) special character
+.TP
+.B rssrefresh=n
+Refresh rate in minutes = delay before reloading resource (URL or text
+file.) 0 = never force reload. Otherwise, apply only if no TTL inside
+feed or if resource is text file.
+(Actually, in multiple selections mode, all feeds are always reloaded
+sequentially, because there is no caching involved)
+.TP
+.B revsc=[y/n]
+Reverse scrolling (= L to R)
+.TP
+.B feedtitle=[y/n]
+Show or hide feed title
+.TP
+.B feedtitledelimiter='str'
+String to be appended after feed title
+.TP
+.B itemtitle=[y/n]
+Show or hide item title
+.TP
+.B itemtitledelimiter='str'
+String to be appended after item title
+.TP
+.B itemdescription=[y/n]
+Show or hide item description
+.TP
+.B itemdescriptiondelimiter='str'
+String to be appended after item description
+.TP
+.B nitemsperfeed=n
+Read N items max per feed (0 = no limit)
+.TP
+.B rmtags=[y/n]
+Strip html tags
+.TP
+.B uppercasetext=[y/n]
+Set all text to upper case
+.TP
+.B homefeed='str'
+Set URL as 'homefeed' = homepage (from command line, not automatically
+saved, so a little bit useless...)
+.TP
+.B openlinkcmd='str'
+\'Open in Browser' command line: Application that will open active link
+(may require path.) Most likely will invoke your favourite browser
+.TP
+.B openlinkargs='str'
+\'Open in Browser' optional arguments
+.TP
+.B clock=[l/r/n]
+Clock location: left / right / none
+.TP
+.B clocksec=[y/n]
+Show seconds
+.TP
+.B clock12h=[y/n]
+12h time format
+.TP
+.B clockdate=[y/n]
+Show date
+.TP
+.B clockaltdateform=[y/n]
+Use alternative date format, ie 'Mon 01 Jan' instead of 'Mon Jan 01'
+.TP
+.B clockfontname='fontname'
+Clock font name
+.TP
+.B clockfontsize=n
+Clock font size (can't be > Tickr height)
+.TP
+.B clockfgcolor=#rrggbbaa
+Clock foreground 32-bit hexa color
+.TP
+.B clockbgcolor=#rrggbbaa
+Clock background 32-bit hexa color
+.TP
+.B setclockgradientbg=[y/n]
+Set clock gradient background
+.TP
+.B clockbgcolor2=#rrggbbaa
+Clock background 32-bit hexa color2
+.TP
+.B disablepopups=[y/n]
+Disable error/warning popup windows
+.TP
+.B pauseonmouseover=[y/n]
+Pause Tickr on mouseover
+.TP
+.B disableleftclick=[y/n]
+Disable left-click
+.TP
+.B mousewheelaction=[s/f/n]
+Mouse wheel acts on: (Tickr\-)speed / feed(\-in\-list) / none
+.br
+(use \<ctrl\> + mouse wheel for alternative action)
+.TP
+.B sfeedpickerautoclose=[y/n]
+Selected feed picker window closes when pointer leaves area
+.TP
+.B enablefeedordering=[y/n]
+Enable feed re-ordering (by user)
+.TP
+.B useauth=[y/n]
+Use HTTP basic authentication
+.TP
+.B user='str'
+User
+.TP
+.B psw='str'
+Password (never saved)
+.TP
+.B useproxy=[y/n]
+Connect through proxy
+.TP
+.B proxyhost='str'
+Proxy host
+.TP
+.B proxyport='str'
+Proxy port
+.TP
+.B useproxyauth=[y/n]
+Use proxy authentication
+.TP
+.B proxyuser='str'
+Proxy user
+.TP
+.B proxypsw='str'
+Proxy password (never saved)
+.SH NOTES
+Mouse usage:
+.PP
+- To open the main menu, right-click inside Tickr area.
+.PP
+- You can import feed subscriptions from another feed reader with
+\'File > Import Feed List (OPML)'.
+.PP
+- To add a new feed, open 'File > Feed Organizer (RSS/Atom)',
+then look for 'New Feed -> Enter URL' at the bottom of the window,
+click 'Clear' and type or paste the feed URL.
+.PP
+- To open a link in your browser, left-click on text.
+.PP
+- Use mouse wheel to either adjust Tickr scrolling speed or open the
+\'Selected Feed Picker' window to quickly move between selected feeds
+(use \<ctrl\> + mouse wheel for alternative action.)
+.PP
+- Basically, use 'File > Feed Organizer (RSS|Atom)' to manage your feed
+list, select feeds, subscribe to new ones, and 'Edit > Preferences' to
+tweak Tickr appearance and behaviour.
+.PP
+Local resources:
+.PP
+- file:///path/file_name is considered an URL and will be XML-parsed, ie
+a RSS or Atom format is expected.
+.PP
+- /path/file_name will be processed as a non-XML text file, ie the file
+will be read 'as is'.
+.PP
+You can set your favourite browser in the Full Settings window.
+Otherwise, the system default one will be looked for.
+.PP
+Tickr parses command line arguments and looks for option(s) then for one
+resource, the rest of the line is ignored. It also reads configuration
+file 'tickr-conf' located in /home/<user_name>/.tickr/ if it exists (or
+\'tickr-conf<n>' if an instance id has been set to n.) See FILES.
+.PP
+Command line options override configuration file ones which override
+default ones.
+.SH FILES
+~/.tickr/tickr-conf
+.br
+~/.tickr/tickr-conf<n>
+.br
+~/.tickr/tickr-url-list
+.br
+~/.tickr/tickr-url-list<n>
+.SH REPORTING BUGS
+Please, report tickr bugs to either Emmanuel Thomas-Maurin
+<manutm007@gmail.com> or Debian.
+.SH AUTHOR
+.B Tickr
+was written by Emmanuel Thomas-Maurin <manutm007@gmail.com>.
+.PP
+This manual page was written by Emmanuel Thomas-Maurin
+<manutm007@gmail.com>, for the Debian project (and may be used by
+others).

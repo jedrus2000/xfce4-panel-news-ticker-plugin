@@ -1,0 +1,4 @@
+From glib-2.34.3/glib/gmain.c in new GTK3-win32 (http://www.gtk.org/download/win32.php)
+
+  Apps that need higher precision in timeouts and clock reads can call
+  timeBeginPeriod() to increase it as much as they want

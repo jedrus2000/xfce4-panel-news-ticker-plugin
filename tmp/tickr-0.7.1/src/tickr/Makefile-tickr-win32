@@ -1,0 +1,39 @@
+# Makefile for TICKR - GTK-based Feed Reader - win32 version
+
+src = tickr_main.c tickr_resource.c tickr_render.c tickr_params.c\
+	tickr_clock.c tickr_feedparser.c tickr_list.c tickr_feedpicker.c\
+	tickr_prefwin.c tickr_otherwins.c tickr_misc.c tickr_helptext.c\
+	tickr_opml.c tickr_http.c tickr_connectwin.c tickr_quickfeedpicker.c\
+	tickr_quicksetup.c tickr_check4updates.c tickr_error.c tickr_tls.c
+
+obj = $(src:.c=.o)
+
+CC = gcc
+
+CFLAGS = -O2 -Wall -Wextra -Wunused-parameter -Wshadow -Wpointer-arith\
+	-ffast-math -pedantic -Wno-variadic-macros\
+	`pkg-config --cflags gtk+-2.0`\
+	-I/home/manutm/src/libxml2-2.7.8-win32/include\
+	-I/home/manutm/src/gnutls-win32/include\
+	-I/home/manutm/src/fribidi-win32/include\
+	-DWIN32_V
+
+LIBS = -mwindows -lwinmm ../libetm-0.5.0/libetm.a\
+	-lws2_32 `pkg-config --libs gtk+-2.0`\
+	../../win32_install_stuff/dlls/libxml2.dll.a\
+	../../win32_install_stuff/dlls/libgnutls-win32/libgnutls.dll.a\
+	../../win32_install_stuff/dlls/libfribidi-win32/libfribidi.dll.a
+
+all: tickr
+
+$(obj): $(src) tickr.h Makefile
+	$(CC) $(CFLAGS) -c $(src)
+
+tickr: $(obj)
+	$(CC) -o tickr $(obj) $(LIBS)
+
+.PHONY: clean
+clean:
+	rm -f $(obj) tickr.exe
+
+#LIBS = --mms-bitfields -mwindows -lwinmm ../libetm-0.5.0/libetm.a\

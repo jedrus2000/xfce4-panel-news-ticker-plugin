@@ -1,0 +1,28 @@
+Hacking glib-win32
+------------------
+
+Replace GetSystemTimeAsFileTime() -> resolution = 15 ms
+with timeGetTime() and some extra stuff in gmain.c
+(also in gmain.h and gthread.c).
+
+The patch is also in bugzilla at:
+<https://bugzilla.gnome.org/show_bug.cgi?id=634653>
+where you may check for updates.
+
+Building glib from src
+----------------------
+
+Download glib-2.26.0 src from gtk.org.
+
+Apply patch.
+
+./configure --prefix=/usr/local/glib --with-threads=win32
+
+Add "-lwinmm" to G_LIBS_EXTRA in config.status.
+Replace "windres" with "windres --use-temp-file" in config.status.
+
+make
+make install
+
+Compile test.c and run it in /usr/local/glib/bin.
+g_timeout_add_full() -> higher resolution ?

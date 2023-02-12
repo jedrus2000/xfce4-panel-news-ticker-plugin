@@ -1,0 +1,30 @@
+libetm version 0.5.0
+--------------------
+
+- Fix compile issues to produce WIN64 binaries with MinGW-w64-x86_64.
+  (Jun 13 2020) -> === NOT FIXED YET ===
+
+- readable_size() can handle huge sizes now. (Dec 2 2016)
+
+- New INFO_OUT(...), INFO_ERR(...), VERBOSE_INFO_OUT(...),
+  VERBOSE_INFO_ERR(...), DEBUG_INFO(...) variadic macros, some of which
+  depends on definition of VERBOSE_OUTPUT and DEBUG_OUTPUT.
+  (Nov 17 2016)
+
+- New remove_surrounding_whitespaces_from_str() function. (Oct 24 2016)
+
+- New big_error() and warning() prototypes: (int, const char *format, ...)
+  (Mar 19 2016)
+
+- New socket connect/send-recv timeout values setter/getter functions.
+  (Jul 20 2015)
+
+- New l_str_insert_at_b() function. (Nov 12 2014)
+
+- Improved error hanling. (Nov 6 2014)
+
+- Add remove_leading/trailing_whitespaces_from_str(). (May 31 2014)
+
+- Stream sockets API moved from tickr -> tcp_socket.c/h. (Nov 12 2013)
+
+- New 'zboolean' type. (Nov 8 2013)

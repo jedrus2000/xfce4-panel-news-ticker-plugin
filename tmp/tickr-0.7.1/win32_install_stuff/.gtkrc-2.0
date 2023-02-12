@@ -1,0 +1,4 @@
+style "win32-font" {
+	font_name = "papyrus 10"
+}
+class "*" style "win32-font"

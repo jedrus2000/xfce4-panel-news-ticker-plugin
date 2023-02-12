@@ -1,0 +1,68 @@
+1 - BUILDING TICKR FROM SOURCES
+
+on Linux
+--------
+
+Required packages are GTK+2, Libxml2 and GNUTls (development ones.) Then do:
+
+./configure
+make
+(sudo) make install
+(make clean)
+
+
+on Windows
+----------
+
+You will have to install MinGW and GTK development stuff (headers and
+libs.) You will also need inno setup and reshacker (reshacker.exe must
+be installed in /usr/local/ResHack/.)
+
+If you want to use autotools, you will have to hack a little bit and
+re-create your own Makefile.am and configure.ac. Those provided are ok
+for ***Linux only*** at the moment.
+
+So, instead of autotools, I use a script (build-on-win32) which works
+fine for me on XP. You will have to adapt it to your build system, at
+least replacing "manutm" by your user name (I'm working on improving
+this script.)
+
+You must also download gtk2-win32-runtime-bin.tar.gz (from
+www.open-tickr.net), the GTK stack runtime which includes a patched
+version of glib. (Of course, you may too get glib-2.26.0 sources, apply
+the patch, compile it yourself then add it to the GTK runtime stack you
+will have to build. Visit www.gtk.org for more info.)
+
+Copy gtk-win32-full-runtime under tickr-<version_num> and run:
+./build-on-win32
+(it will build the win32 installer.)
+
+
+2 - INSTALL DIRS DEFINED IN
+
+- tickr.desktop
+- debian/install
+- debian/menu
+- src/tickr/tickr.h
+- src/tickr/Makefile.am
+
+
+3 - APPLICATION NAME
+
+source/binary package name and command
+
+previous name:			news
+last stable version:		0.5.2
+
+new name:			tickr
+first released version:		0.5.3
+
+in src/tickr: all source files have now been renamed:
+news_*.c/h -> tickr_*/c/h
+
+app name and dirs are all (?) defined in tickr.h (at least they should be)
+
+
+4 - WIDGETS PACKING
+
+see: doc/widgets_packing

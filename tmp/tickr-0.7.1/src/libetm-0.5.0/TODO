@@ -1,0 +1,11 @@
+TODO:
+
+- More testing.
+
+(Not sure yet about that:)
+
+- Add HTTP API (-> html_entities.h, http.h, http.c).
+
+- Add doubly-linked list API (-> dl_list.h, dl_list.c / FList -> DLList ?)
+
+- Change func names ?

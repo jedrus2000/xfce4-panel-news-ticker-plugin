@@ -1,0 +1,139 @@
+bug list
+--------
+
+- regression bug in tickr_feedpicker.c/check_and_update_feed_url():
+  some URLs now unreachable (https://politepol.com/fd/Tkny399wXUs5)
+
+- optimize processing time of 'big' text files
+
+- some setting changes not detected, nor re-computed
+  -> clock width changes with not-padded hours from 9 to 10 and 12 to 1
+
+- use "\(aq" instead of "\'" at beginning of lines in man page ?
+
+- fix win64 compile stack (or only produce 32-bit binaries ?)
+
+(not a bug)
+- -win_x not working BUT seems to actually relate to window manager:
+  win_x > 0 is only effective when win_w < screen_w (ie the window can
+  only be located 'within' the screen)
+
+
+stuff to implement and new features requests
+--------------------------------------------
+
+- appimage pkg ?
+
+- continue to better document/comment tickr_http.c/fetch_resource()
+
+- update original tickr-url-list:
+  - switch to https when doable
+  - pick good sources
+
+- in tickr_opml.c:
+  - add option to import feed list without checking all URLs ?
+
+- run socket code in a separate thread (asynchronously) ? or use
+  g_timeout_add() and g_idle_add() when loading a feed, to avoid gui
+  blocking ?
+
+- implement dual licensing: paid licenses for commercial use or extended
+  support ????
+
+- make end-of-feed-blank-line a setting (alternative = str)
+
+- should 'overrideredirect' option be set only from CLI ?
+
+- read from stdin -> -text="" ?
+  -> echo "hello" > msg_file && tickr msg_file
+
+- polish prefs/full settings -> what about font size <-> tickr height ?
+
+- editable feed title
+
+- need sth really convenient to go to prev/next feed
+
+- new clock delimiter setting
+
+- marked items stuff -> FeedLinkAndOffset - highlight keywords ?
+
+- wait for scrolling to complete before reloading feed (ie queue
+  reloading)
+
+- outline text
+
+- new way of handling CLI args: "-revsc" = "-revsc=DEFAULT_VALUE"
+
+- translations (finnish, french, german, spanish, russian, chinese,
+  japanese, ?)
+
+- split tickr_main.c (too big & a mess now) in 2 or more modules.
+
+- what about: new expandable dynamic arrays in libetm ?
+  -> mainly useful for array of 'big' elements
+
+- move FList from tickr_list.c/h to libetm: dl_list.c/h (generic
+  double-linked lists)
+
+- what about: read all then show all -> -readallthenshowall=[y/n] ?
+
+  is this a better alternative to feed delimiter setting ->
+  make a new feed from all selected feeds (kind of new reading mode) ?
+
+- no win32 drive letter in file:/// URL
+
+- new -attop -attop+=n -atbottom -atbottom-=n CLI options
+
+- -no-ui option should include preventing users to close the program
+
+- new -conffile=FILE CLI option
+
+- timeout to check network connectivity ?
+
+- some caching mechanism ?
+
+- ability to disable feed item tooltip
+
+- add some plugin-able stuff
+
+- hide tickr on mouseover (????) -> on <ctrl> + mouseover
+
+- add 'feed organizer' after getting sample list
+
+- update this:
+  question at program start-up about new feed list format conversion:
+  if version = 0.6.2 and feed list exists and feed list backup doesn't
+  exist, create backup and convert to new format.
+
+- could some arrays be replaced by linked lists (which eat much less
+  memory ?)
+
+- search/filter feature (option to filter out feed items on str,
+  publication date, ...)
+
+- add things to quicksetup: keyboard and mouse things, ?
+
+- can gdk/cairo frame drawing be synced with vsync ?
+
+
+(nothing decided yet)
+
+- new option 'disable right-click' ???? not sure yet
+
+- is it worth switching to gtk3 ?
+
+- implement digest access authentication
+
+- upload translation templates on launchpad
+
+- improve file i/o code consistency
+
+- 'detachable control win'
+
+- handles to drag window
+
+- pause scrolling for n seconds for each item -> -pauseeach=n
+
+- sound alerts -> -allowsoundalerts=[y/n]
+
+- read n times then exit -> -nread=n

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>Tickr Feed List</title>
+  </head>
+  <body>
+    <outline text="CNEOS Recent News" xmlUrl="https://cneos.jpl.nasa.gov/feed/news.xml" tickrFeedRank="   "/>
+    <outline text="Ars Technica" xmlUrl="http://feeds.arstechnica.com/arstechnica/index" tickrFeedRank="   "/>
+    <outline text="BBC News - Business" xmlUrl="http://feeds.bbci.co.uk/news/business/rss.xml?edition%3Dint" tickrFeedRank="   "/>
+    <outline text="BBC News - Home" xmlUrl="http://feeds.bbci.co.uk/news/rss.xml?edition%3Dint" tickrFeedRank="   "/>
+    <outline text="BBC News - Science %26 Environment" xmlUrl="http://feeds.bbci.co.uk/news/science_and_environment/rss.xml?edition%3Dint" tickrFeedRank="   "/>
+    <outline text="BBC News - Technology" xmlUrl="http://feeds.bbci.co.uk/news/technology/rss.xml?edition%3Dint" tickrFeedRank="   "/>
+    <outline text="OMG! Ubuntu!" xmlUrl="http://feeds.feedburner.com/d0od" tickrFeedRank="   "/>
+    <outline text="Yahoo! Finance: yhoo News" xmlUrl="https://feeds.finance.yahoo.com/rss/2.0/headline?s%3Dyhoo%26region%3DUS%26lang%3Den-US" tickrFeedRank="   "/>
+    <outline text="Top stories - Google News" xmlUrl="https://news.google.com/rss?cf%3Dall%26hl%3Den-US%26pz%3D1k%26ucbcb%3D1%26gl%3DUS%26ceid%3DUS:en" tickrFeedRank="   "/>
+    <outline text="Yahoo News - Latest News %26 Headlines" xmlUrl="https://news.yahoo.com/rss/world" tickrFeedRank="   "/>
+    <outline text="CNN.com - RSS Channel - HP Hero" xmlUrl="http://rss.cnn.com/rss/cnn_topstories.rss" tickrFeedRank="   "/>
+    <outline text="CNN.com - RSS Channel - App International Edition" xmlUrl="http://rss.cnn.com/rss/edition.rss" tickrFeedRank="   "/>
+    <outline text="CNN.com - RSS Channel - Regions - Europe" xmlUrl="http://rss.cnn.com/rss/edition_europe.rss" tickrFeedRank="   "/>
+    <outline text="CNN.com - RSS Channel - US" xmlUrl="http://rss.cnn.com/rss/edition_us.rss" tickrFeedRank="   "/>
+    <outline text="CNN.com - RSS Channel - World" xmlUrl="http://rss.cnn.com/rss/edition_world.rss" tickrFeedRank="   "/>
+    <outline text="NYT %3E World News" xmlUrl="https://rss.nytimes.com/services/xml/rss/nyt/World.xml" tickrFeedRank="   "/>
+    <outline text="Slashdot" xmlUrl="http://rss.slashdot.org/Slashdot/slashdot" tickrFeedRank="   "/>
+    <outline text="Weather.com.au - Sydney Weather" xmlUrl="http://rss.weather.com.au/nsw/sydney" tickrFeedRank="   "/>
+    <outline text="газета РБК - последний выпуск" xmlUrl="http://static.feed.rbc.ru/rbc/logical/rbcdaily.ru/daily.rss" tickrFeedRank="   "/>
+    <outline text="Deeplinks" xmlUrl="https://www.eff.org/rss/updates.xml" tickrFeedRank="   "/>
+    <outline text="En direct : le Tchad ferme ses frontières après la mort du" xmlUrl="https://www.france24.com/fr/rss" tickrFeedRank="   "/>
+    <outline text="Kotimaa - Helsingin Sanomat " xmlUrl="https://www.hs.fi/rss/kotimaa.xml" tickrFeedRank="   "/>
+    <outline text="Iltalehti.fi tuoreimmat uutiset - Uutiset" xmlUrl="https://www.iltalehti.fi/rss/uutiset.xml" tickrFeedRank="   "/>
+    <outline text="NASA Breaking News" xmlUrl="https://www.nasa.gov/rss/dyn/breaking_news.rss" tickrFeedRank="   "/>
+    <outline text="The Guardian" xmlUrl="https://www.theguardian.com/international/rss" tickrFeedRank="   "/>
+    <outline text="Business | The Guardian" xmlUrl="https://www.theguardian.com/uk/business/rss" tickrFeedRank="   "/>
+    <outline text="Opinion | The Guardian" xmlUrl="https://www.theguardian.com/uk/commentisfree/rss" tickrFeedRank="   "/>
+    <outline text="Technology | The Guardian" xmlUrl="https://www.theguardian.com/uk/technology/rss" tickrFeedRank="   "/>
+    <outline text="World news | The Guardian" xmlUrl="https://www.theguardian.com/world/rss" tickrFeedRank="   "/>
+    <outline text="TV5MONDE info - Nouvelles technologies" xmlUrl="http://www.tv5monde.com/TV5Site/rss/actualites.php?rub%3D12" tickrFeedRank="   "/>
+    <outline text="TV5MONDE info - Monde" xmlUrl="http://www.tv5monde.com/TV5Site/rss/actualites.php?rub%3D2" tickrFeedRank="   "/>
+    <outline text="TV5MONDE info - Economie/finances" xmlUrl="http://www.tv5monde.com/TV5Site/rss/actualites.php?rub%3D7" tickrFeedRank="   "/>
+    <outline text="ynet - חדשות" xmlUrl="http://www.ynet.co.il/Integration/StoryRss2.xml" tickrFeedRank="   "/>
+    <outline text="NHKニュース" xmlUrl="http://www3.nhk.or.jp/rss/news/cat0.xml" tickrFeedRank="   "/>
+  </body>
+</opml>
+<!-- Exported on Tue 20 Apr 2021 03:18:41 PM CEST -->

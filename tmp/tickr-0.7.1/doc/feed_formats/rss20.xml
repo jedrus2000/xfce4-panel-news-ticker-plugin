@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<rss>
+	<channel>
+		<title>FEED_TITLE_(rss2.0)</title>
+		<link>FEED_LINK</link>
+		<item>
+			<title>ITEM_1_TITLE</title>
+			<description>ITEM_1_DESCRIPTION</description>
+			<link>ITEM_1_LINK</link>
+		</item>
+		<item>
+			<title>ITEM_2_TITLE</title>
+			<description>ITEM_2_DESCRIPTION</description>
+			<link>ITEM_2_LINK</link>
+		</item>
+		<item>
+			<title>ITEM_3_TITLE</title>
+			<description>ITEM_3_DESCRIPTION</description>
+			<link>ITEM_3_LINK</link>
+		</item>
+	</channel>
+</rss>
