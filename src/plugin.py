@@ -26,18 +26,18 @@ class PanelPlugin(Gtk.Box):
         This method is called by sample_py_new() method
         """
         super().__init__()
+        #self.my_window = Gtk.Window(attached_to=self,
+        #                            default_width=500, is_maximized=True, resizable=False,
+        #                            destroy_with_parent=True, accept_focus=False, focus_visible=False, has_resize_grip=False,
+        #                            hide_titlebar_when_maximized=True,)
+        self.set_size_request(500, -1)
         self.hello_lbl = Gtk.Label(requests.get("https://httpbin.org/uuid").json()["uuid"])
         self.world_lbl = Gtk.Label("World")
-        self.Box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=1)
-        self.add(self.Box)
-        self.ScrolledWindow = Gtk.ScrolledWindow()
-        self.ScrolledWindow.set_overlay_scrolling(True)
-        self.ScrolledWindow.set_min_content_width(500)
-        self.ScrolledWindow.add(self.hello_lbl)
-        self.Box.pack_start(self.ScrolledWindow, True, True, 1)
-        self.Box.pack_end(self.world_lbl, True, True, 1)
-        hadjustment = Gtk.Adjustment()
-        # self.ScrolledWindow.do_scroll_child(Gtk.ScrollType.STEP_LEFT, True)
+        #self.Box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=1)
+        self.set_orientation(orientation=Gtk.Orientation.HORIZONTAL)
+        self.set_spacing(spacing=1)
+        self.pack_start(self.hello_lbl, True, True, 1)
+        self.pack_end(self.world_lbl, True, True, 1)
 
         #while True:
         #    self.ScrolledWindow.do_scroll_child(Gtk.ScrollType.STEP_LEFT, True)
