@@ -1,5 +1,6 @@
 
-use gtk::{WidgetExt};
+use gtk::{Widget};
+use gtk::prelude::WidgetExtManual;
 
 use crate::app::{App, AppEvent};
 use crate::state::{StateEvent};
@@ -200,7 +201,7 @@ impl Config {
 
     fn close_config_dialog(app: &mut App) {
         if let Some(dialog) = &app.gui.config_dialog {
-            dialog.destroy();
+            unsafe { dialog.destroy(); }
         }
     }
 }

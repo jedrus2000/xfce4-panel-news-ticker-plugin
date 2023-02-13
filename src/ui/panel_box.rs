@@ -1,9 +1,7 @@
 
 
-use gtk::ContainerExt;
-use gtk::WidgetExt;
-
-
+use gtk::Container;
+use gtk::Widget;
 
 
 #[derive(Shrinkwrap)]

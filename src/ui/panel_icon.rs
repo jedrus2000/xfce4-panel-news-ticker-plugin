@@ -1,7 +1,7 @@
 
 
-use gtk::ButtonExt;
-use gtk::WidgetExt;
+use gtk::Button;
+use gtk::Widget;
 
 
 #[derive(Shrinkwrap)]

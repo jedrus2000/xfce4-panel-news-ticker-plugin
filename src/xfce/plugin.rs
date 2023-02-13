@@ -131,7 +131,7 @@ impl XfcePanelPlugin {
 
     pub fn save_location(&self, create: bool) -> Option<String> {
         unsafe {
-            let value = xfce_panel_plugin_save_location(self.pointer, create.to_glib());
+            let value = xfce_panel_plugin_save_location(self.pointer, create.into_glib());
             if value.is_null() {
                 None
             } else {

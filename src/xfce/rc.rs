@@ -1,14 +1,14 @@
 
 use crate::xfce::ffi::*;
 use glib::translate::*;
-use glib::translate::{ToGlib, FromGlib, FromGlibPtrContainer, FromGlibPtrNone};
+use glib::translate::{ToGlibPtr, FromGlib, FromGlibPtrContainer, FromGlibPtrNone};
 
 
 #[allow(dead_code)]
 pub fn rc_simple<U, F: FnOnce(* const XfceRc) -> U>(filename: &str, f: F) -> U {
     let readonly = true;
     unsafe {
-        let rc = xfce_rc_simple_open(filename.to_glib_none().0, readonly.to_glib());
+        let rc = xfce_rc_simple_open(filename.to_glib_none().0, readonly.into_glib());
         let res = f(rc.clone());
         xfce_rc_close(rc);
         res
@@ -21,7 +21,7 @@ pub fn rc_simple<U, F: FnOnce(* const XfceRc) -> U>(filename: &str, f: F) -> U {
 pub fn rc_simple_mut<U, F: FnOnce(* mut XfceRc) -> U>(filename: &str, f: F) -> U {
     let readonly = false;
     unsafe {
-        let rc = xfce_rc_simple_open(filename.to_glib_none().0, readonly.to_glib());
+        let rc = xfce_rc_simple_open(filename.to_glib_none().0, readonly.into_glib());
         let res = f(rc.clone());
         xfce_rc_close(rc);
         res
@@ -69,7 +69,7 @@ pub fn get_entries(rc: * const XfceRc, group: &str) -> Vec<String> {
 #[allow(dead_code)]
 pub fn delete_group(rc: * mut XfceRc, group: &str, global: bool) {
     unsafe {
-       xfce_rc_delete_group(rc, group.to_glib_none().0, global.to_glib()) 
+       xfce_rc_delete_group(rc, group.to_glib_none().0, global.into_glib())
     }
 }
 
@@ -99,7 +99,7 @@ pub fn set_group(rc: * mut XfceRc, group: &str) {
 #[allow(dead_code)]
 pub fn delete_entry(rc: * mut XfceRc, key: &str, global: bool) {
     unsafe {
-       xfce_rc_delete_entry(rc, key.to_glib_none().0, global.to_glib()) 
+       xfce_rc_delete_entry(rc, key.to_glib_none().0, global.into_glib())
     }
 }
 
@@ -128,7 +128,7 @@ pub fn read_entry_untranslated (rc: * const XfceRc, key: &str, fallback: &str) -
 #[allow(dead_code)]
 pub fn read_bool_entry(rc: * const XfceRc, key: &str, fallback: bool) -> bool {
     unsafe {
-        FromGlib::from_glib(xfce_rc_read_bool_entry(rc, key.to_glib_none().0, fallback.to_glib()))
+        FromGlib::from_glib(xfce_rc_read_bool_entry(rc, key.to_glib_none().0, fallback.into_glib()))
     }
 }
 
@@ -157,7 +157,7 @@ pub fn write_entry(rc: * mut XfceRc, key: &str, value: &str) {
 #[allow(dead_code)]
 pub fn write_bool_entry(rc: * mut XfceRc, key: &str, value: bool) {
     unsafe {
-       xfce_rc_write_bool_entry(rc, key.to_glib_none().0, value.to_glib()) 
+       xfce_rc_write_bool_entry(rc, key.to_glib_none().0, value.into_glib())
     }
 }
 

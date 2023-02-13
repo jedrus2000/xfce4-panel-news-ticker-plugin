@@ -23,8 +23,8 @@ pub fn icon_by_color_and_size(color: &str, size: usize) -> Option<gdk_pixbuf::Pi
         <circle cx="109.833" cy="346.26" r="46.088"/>
     </svg>"#, size, size, color);
     let cancellable: Option<&gio::Cancellable> = None;
-    let stream = gio::MemoryInputStream::new_from_bytes(&glib::Bytes::from_owned(icon_data.into_bytes()));
-    let pixbuf = gdk_pixbuf::Pixbuf::new_from_stream(&stream, cancellable);
+    let stream = gio::MemoryInputStream::from_bytes(&glib::Bytes::from_owned(icon_data.into_bytes()));
+    let pixbuf = gdk_pixbuf::Pixbuf::from_stream(&stream, cancellable);
     match pixbuf {
         Ok(pixbuf) => Some(pixbuf),
         Err(err) => {

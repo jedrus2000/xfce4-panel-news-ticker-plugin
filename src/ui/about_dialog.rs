@@ -1,6 +1,6 @@
 use gtk;
-use gtk::DialogExt;
-use gtk::WidgetExt;
+use gtk::Dialog;
+use gtk::Widget;
 
 #[derive(Shrinkwrap)]
 pub struct AboutDialog {

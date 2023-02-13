@@ -2,7 +2,7 @@
 use crate::app::{App, AppEvent};
 use crate::state::{ErrorType, StateEvent};
 use glib::SourceId;
-use glib::translate::{FromGlib, ToGlib};
+use glib::translate::{FromGlib, IntoGlib};
 use crate::config::Config;
 
 pub enum ReasonForStopping {
@@ -91,7 +91,7 @@ impl Feed {
         app.feed.is_polling = false;
         if let Some(source_id) = &app.feed.polling_id {
             // TODO: Fix hackish solution to borrowed SourceId.
-            glib::source::source_remove(SourceId::from_glib(source_id.to_glib()));
+            unsafe { glib::source::source_remove(SourceId::from_glib(source_id.to_glib())); }
         }
         app.feed.polling_id = None;
         app.dispatch(AppEvent::FeedEvent(FeedEvent::Stopped(reason)));

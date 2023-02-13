@@ -1,16 +1,16 @@
 
 
-use gtk::GtkWindowExt;
-use gtk::DialogExt;
-use gtk::EntryExt;
-use gtk::ToggleButtonExt;
-use gtk::WidgetExt;
-use gtk::LabelExt;
-use gtk::ContainerExt;
-use gtk::ButtonExt;
-use gtk::TextBufferExt;
-use gtk::TextViewExt;
-use gtk::NotebookExt;
+use gtk::Window;
+use gtk::Dialog;
+use gtk::Entry;
+use gtk::ToggleButton;
+use gtk::Widget;
+use gtk::Label;
+use gtk::Container;
+use gtk::Button;
+use gtk::TextBuffer;
+use gtk::TextView;
+use gtk::Notebook;
 use crate::app::App;
 
 use gtk::prelude::*;
@@ -318,7 +318,7 @@ impl FeedHeadersList {
         scrolling_area_inner.show();
         
         let list_view = gtk::TreeView::new();
-        let list_store = gtk::ListStore::new(&[gtk::Type::String, gtk::Type::String]);
+        let list_store = gtk::ListStore::new(&[glib::Type::STRING, glib::Type::STRING]);
 
         // list_store.insert_with_values(None, &[0, 1], &[&"X-Custom-Header", &"Hello World"]);
 

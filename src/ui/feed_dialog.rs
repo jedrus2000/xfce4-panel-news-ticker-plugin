@@ -1,11 +1,11 @@
 
 
-use gtk::ContainerExt;
-use gtk::DialogExt;
-use gtk::WidgetExt;
-use gtk::ButtonExt;
-use gtk::LinkButtonExt;
-use gtk::LabelExt;
+use gtk::Container;
+use gtk::Dialog;
+use gtk::Widget;
+use gtk::Button;
+use gtk::LinkButton;
+use gtk::Label;
 use gdk;
 
 
