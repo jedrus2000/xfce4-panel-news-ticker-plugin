@@ -34,10 +34,14 @@ class PanelPlugin(Gtk.ScrolledWindow):
         #                            hide_titlebar_when_maximized=True,)
         #self.my_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         #self.add(self.my_box)
-        self.set_size_request(200, 20)
+        self.set_size_request(200, -1)
+        self.set_overlay_scrolling(True)
+        self.set_policy(Gtk.PolicyType.NEVER,
+                        Gtk.PolicyType.AUTOMATIC)
         self.my_layout: Gtk.Layout = Gtk.Layout()
         self.my_layout.set_size(1500, 20)
         self.my_layout.set_vexpand(True)
+        self.my_layout.set_hexpand(True)
         self.add(self.my_layout)
 
         #self.my_viewport.set_border_width(0)
@@ -49,13 +53,13 @@ class PanelPlugin(Gtk.ScrolledWindow):
         #self.my_label.set_max_width_chars(1000)
         #self.my_label.set_hexpand(True)
         #self.my_label.set_ellipsize(Pango.EllipsizeMode.NONE)
-        self.my_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        self.my_box.pack_end(self.my_label, False, False, 0)
-        self.my_layout.put(self.my_box, 0, 0)
-        hadjustment = self.my_layout.get_hadjustment()
-        self.set_hadjustment(hadjustment)
-        vadjustment =  self.my_layout.get_vadjustment()
-        self.set_vadjustment(vadjustment)
+        #self.my_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        #self.my_box.pack_end(self.my_label, False, False, 0)
+        self.my_layout.put(self.my_label, 0, 0)
+        #hadjustment = self.my_layout.get_hadjustment()
+        #self.set_hadjustment(hadjustment)
+        #vadjustment =  self.my_layout.get_vadjustment()
+        #self.set_vadjustment(vadjustment)
         #self.my_test_label = Gtk.Label("Test label")
         #self.my_viewport.add(self.my_label)
         #self.Box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=1)
@@ -69,29 +73,28 @@ class PanelPlugin(Gtk.ScrolledWindow):
         #        Gtk.main_iteration()
 
     def my_scroll_callback(self):
-        self.counter += 3
+        #self.counter += 3
         #self.my_label.set_text(f"Counter: {self.counter}")
         h_adj: Gtk.Adjustment = self.my_layout.get_hadjustment()
-        h_adj.freeze_notify()
-        n = h_adj.get_upper() - self.my_window_width
+        self.freeze_notify()
+        n = h_adj.get_upper() # - self.my_window_width
         if n < 1:
             # safety incase we don't have an actual width calculated width
             n = 1
-        h_adj_value = h_adj.get_value()
 
-        if h_adj_value >= n:
+        if self.counter >= n:
             # we've reached the end.  reset the marquee to the 0-position.
-            h_adj_value = 0
+            self.counter = 0
         else:
             # scroll the marquee to the left by 3px
-            h_adj_value = + 3
+            self.counter += 3
 
-        self.my_label.set_text(f"{h_adj_value=} {h_adj.get_lower()=} {h_adj.get_upper()=} {h_adj.get_page_size()=}")
+        self.my_label.set_text(f"{self.counter=} {h_adj.get_lower()=} {h_adj.get_upper()=} {h_adj.get_page_size()=}")
 
         # redraw the control and it's children (the label).
         # h_adj.configure(value=h_adj_value, lower=0, upper=h_adj.get_upper(), step_increment=3, page_increment=3, page_size=3)
         h_adj.set_value(self.counter) # h_adj_value)
-        h_adj.thaw_notify()
+        self.thaw_notify()
         # self.my_viewport.show_all()
         return True
 
