@@ -2,9 +2,10 @@
 
 import gi
 import requests
+import cairo
 
 gi.require_version('Gtk','3.0')
-from gi.repository import Gtk, GLib, Pango
+from gi.repository import Gtk, GLib, Pango, PangoCairo
 
 PLUGIN_NAME        = 'Sample-Python-Plugin'
 PLUGIN_VERSION     = '0.1.0'
@@ -27,46 +28,26 @@ class PanelPlugin(Gtk.ScrolledWindow):
         This method is called by sample_py_new() method
         """
         super().__init__()
-        self.my_window_width = 100
-        #self.my_window = Gtk.Window(attached_to=self,
-        #                            default_width=500, is_maximized=True, resizable=False,
-        #                            destroy_with_parent=True, accept_focus=False, focus_visible=False, has_resize_grip=False,
-        #                            hide_titlebar_when_maximized=True,)
-        #self.my_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        #self.add(self.my_box)
         self.set_size_request(200, -1)
-        self.set_overlay_scrolling(True)
-        self.set_policy(Gtk.PolicyType.NEVER,
-                        Gtk.PolicyType.AUTOMATIC)
-        self.my_layout: Gtk.Layout = Gtk.Layout()
-        self.my_layout.set_size(1500, 20)
-        self.my_layout.set_vexpand(True)
-        self.my_layout.set_hexpand(True)
-        self.add(self.my_layout)
-
-        #self.my_viewport.set_border_width(0)
-        #self.my_viewport.set_size_request(100, 20)
+        self.set_policy(Gtk.PolicyType.EXTERNAL,
+                Gtk.PolicyType.AUTOMATIC)
+        self.my_viewport = Gtk.Viewport()
+        self.my_viewport.set_border_width(0)
+        # self.my_viewport.set_size_request(1000, 20)
+        self.my_label = Gtk.Label("                                                                                                 [lblMarquee] Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec metus quam, ullamcorper eu suscipit quis, rutrum sit amet massa.                                                                                                 end......")
+        self.my_viewport.add(self.my_label)
         #self.my_viewport.set_hexpand(False)
-        #self.pack_start(self.my_viewport, False, False, 0)
-        self.my_label = Gtk.Label("                                                                                                 [lblMarquee] Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec metus quam, ullamcorper eu suscipit quis, rutrum sit amet massa.                                                                                                 ")
-        #self.my_label.set_width_chars(1000)
-        #self.my_label.set_max_width_chars(1000)
-        #self.my_label.set_hexpand(True)
-        #self.my_label.set_ellipsize(Pango.EllipsizeMode.NONE)
-        #self.my_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        #self.my_box.pack_end(self.my_label, False, False, 0)
-        self.my_layout.put(self.my_label, 0, 0)
         #hadjustment = self.my_layout.get_hadjustment()
         #self.set_hadjustment(hadjustment)
         #vadjustment =  self.my_layout.get_vadjustment()
         #self.set_vadjustment(vadjustment)
         #self.my_test_label = Gtk.Label("Test label")
         #self.my_viewport.add(self.my_label)
-        #self.Box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=1)
+
         #
-        # self.my_box.pack_end(self.my_label, False, False, 0)
+        self.add(self.my_viewport)
         self.counter = 0
-        self.countdown_event = GLib.timeout_add(33, self.my_scroll_callback)
+        self.countdown_event = GLib.timeout_add(133, self.my_scroll_callback)
         #while True:
         #    self.ScrolledWindow.do_scroll_child(Gtk.ScrollType.STEP_LEFT, True)
         #    while Gtk.events_pending():
@@ -75,9 +56,10 @@ class PanelPlugin(Gtk.ScrolledWindow):
     def my_scroll_callback(self):
         #self.counter += 3
         #self.my_label.set_text(f"Counter: {self.counter}")
-        h_adj: Gtk.Adjustment = self.my_layout.get_hadjustment()
-        self.freeze_notify()
-        n = h_adj.get_upper() # - self.my_window_width
+
+        h_adj: Gtk.Adjustment = self.my_viewport.get_hadjustment()
+        h_adj.freeze_notify()
+        n = h_adj.get_upper() - 200
         if n < 1:
             # safety incase we don't have an actual width calculated width
             n = 1
@@ -89,12 +71,16 @@ class PanelPlugin(Gtk.ScrolledWindow):
             # scroll the marquee to the left by 3px
             self.counter += 3
 
-        self.my_label.set_text(f"{self.counter=} {h_adj.get_lower()=} {h_adj.get_upper()=} {h_adj.get_page_size()=}")
+        k = int(1600 / points_to_pixels(self.my_label.get_style_context().get_font(Gtk.StateFlags.NORMAL))[1].height)
+        s = k * " "
+        # s = ' ' * int(400 / (self.my_label.get_style_context().get_font(Gtk.StateFlags.NORMAL).get_size_is_absolute() .get_size() / Pango.SCALE))
+
+        #self.my_label.set_text(f"{s} {h_adj.get_lower()=} {h_adj.get_upper()=} {h_adj.get_page_size()=}")
 
         # redraw the control and it's children (the label).
         # h_adj.configure(value=h_adj_value, lower=0, upper=h_adj.get_upper(), step_increment=3, page_increment=3, page_size=3)
         h_adj.set_value(self.counter) # h_adj_value)
-        self.thaw_notify()
+        h_adj.thaw_notify()
         # self.my_viewport.show_all()
         return True
 
@@ -136,3 +122,11 @@ class PanelPlugin(Gtk.ScrolledWindow):
 
         dialog.connect('response', lambda dialog, data: dialog.destroy())
         dialog.show_all()
+
+def points_to_pixels(font: Pango.FontDescription):
+    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 0, 0)
+    ctx = cairo.Context(surface)
+    layout = PangoCairo.create_layout(ctx)
+    layout.set_font_description(font)
+    extents = layout.get_pixel_extents()
+    return extents
