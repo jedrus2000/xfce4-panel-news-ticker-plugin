@@ -1,8 +1,8 @@
 
 use crate::state::{State, StateEvent};
 use crate::gui::{Gui, GuiEvent};
-use crate::config::{Config, ConfigEvent};
-use crate::feed::{Feed, FeedEvent};
+// use crate::config::{Config, ConfigEvent};
+// use crate::feed::{Feed, FeedEvent};
 use crate::xfce::ffi::XfcePanelPluginPointer;
 
 
@@ -10,30 +10,33 @@ pub enum AppEvent {
     Init,
     StateEvent(StateEvent),
     GuiEvent(GuiEvent),
+    /*
     ConfigEvent(ConfigEvent),
     FeedEvent(FeedEvent),
+    */
 }
 
 pub struct App {
     pub tx: glib::Sender<AppEvent>,
     pub state: State,
-    pub gui: Gui,
+    pub gui: Gui,/*
     pub config: Config,
     pub feed: Feed
+    */
 }
 
 impl App {
     pub fn new (pointer: XfcePanelPluginPointer, tx: glib::Sender<AppEvent>) -> Self {
         let gui = Gui::new(pointer, tx.clone());
         let state = State::new();
-        let config = Config::new();
-        let feed = Feed::new();
+        // let config = Config::new();
+        // let feed = Feed::new();
         return App {
             tx,
             state,
-            gui,
+            gui,/*
             config,
-            feed
+            feed*/
         }
     }
 
@@ -45,12 +48,14 @@ impl App {
             AppEvent::GuiEvent(_) => {
                 Gui::reducer(self, event);
             }
+            /*
             AppEvent::ConfigEvent(_) => {
                 Config::reducer(self, event);
             }
             AppEvent::FeedEvent(_) => {
                 Feed::reducer(self, event);
             }
+             */
             AppEvent::Init => self.init()
         };
         // Handle when to update?
@@ -58,9 +63,13 @@ impl App {
     }
 
     fn init(&mut self) {
-        Config::init(self);
+        /*
+         Config::init(self);
+         */
         Gui::init(self);
+        /*
         self.dispatch(AppEvent::FeedEvent(FeedEvent::Start));
+         */
     }
 
     pub fn dispatch(&mut self, event: AppEvent) {
@@ -75,7 +84,7 @@ impl App {
         app.dispatch(AppEvent::Init);
         rx.attach(None, move |event| {
             app.reducer(event);
-            gtk::Continue(true)
+            glib::Continue(true)
         });
     }
 
