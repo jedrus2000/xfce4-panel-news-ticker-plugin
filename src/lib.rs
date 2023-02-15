@@ -11,9 +11,11 @@ extern crate reqwest;
 
 /*
 mod res;
+*/
 mod xfce;
 mod state;
 mod gui;
+/*
 mod config;
 mod feed;
 mod ui;
@@ -31,5 +33,5 @@ pub extern fn constructor(pointer: XfcePanelPluginPointer) {
         println!("Failed to initialize GTK.");
         return;
     }
-    // app::App::start(pointer);
+    app::App::start(pointer);
 }
