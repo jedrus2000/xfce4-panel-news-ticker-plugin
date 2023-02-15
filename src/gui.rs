@@ -54,7 +54,7 @@ impl Gui {
 
         let plugin_container = plugin.container.clone();
 
-        let window: gtk::Window = plugin_container.get_parent().unwrap().downcast().unwrap();
+        let window: gtk::Window = plugin_container.parent().unwrap().downcast().unwrap();
 
         /*
         let panel_box = ui::panel_box::PanelBox::new();
