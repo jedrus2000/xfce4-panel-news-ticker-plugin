@@ -2,7 +2,9 @@
 name = "xfce4-panel-news-ticker-plugin"
 version = "0.1.0"
 edition = "2021"
-
+authors = ["Andrzej Bargański <a.barganski@gmail.com>"]
+homepage = "https://github.com/jedrus2000/xfce4-panel-news-ticker-plugin"
+repository = "https://github.com/jedrus2000/xfce4-panel-news-ticker-plugin"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]

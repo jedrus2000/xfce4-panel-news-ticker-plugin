@@ -9,17 +9,15 @@ extern crate rss;
 extern crate reqwest;
 #[macro_use] extern crate shrinkwraprs;
 
-/*
 mod res;
-*/
 mod xfce;
 mod state;
 mod gui;
 /*
 mod config;
 mod feed;
-mod ui;
 */
+mod ui;
 mod app;
 
 

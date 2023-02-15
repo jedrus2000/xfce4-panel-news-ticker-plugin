@@ -8,12 +8,16 @@ use crate::state::{StateEvent};
 /*
 use crate::config::{ConfigEvent};
 use crate::feed::{FeedEvent};
+*/
 use crate::ui;
 use crate::ui::{
     about_dialog::AboutDialog,
+    /*
     config_dialog::ConfigDialog,
     feed_dialog::FeedDialog
+     */
 };
+/*
 use crate::res::icon;
 */
 
@@ -38,7 +42,9 @@ pub struct Gui {
     pub icons: icon::IconSet,
     pub panel_box: ui::panel_box::PanelBox,
     pub panel_icon: ui::panel_icon::PanelIcon,
+    */
     pub about_dialog: Option<AboutDialog>,
+    /*
     pub config_dialog: Option<ConfigDialog>,
     pub feed_dialog: Option<FeedDialog>,
      */
@@ -85,7 +91,9 @@ impl Gui {
             panel_icon,
             icons: icon::IconSet::new(30),
             config_dialog: None,
+            */
             about_dialog: None,
+            /*
             feed_dialog: None,
              */
             menu_item_error_message,
@@ -298,7 +306,6 @@ impl Gui {
     }
 
     pub fn open_about(app: &mut App){
-        /*
         if app.gui.about_dialog.is_none() {
             let dialog = AboutDialog::new(&app.gui.window);
             {
@@ -309,15 +316,10 @@ impl Gui {
             }
             app.gui.about_dialog = Some(dialog);
         }
-
-         */
     }
 
     pub fn cleanup_about(app: &mut App) {
-        /*
         app.gui.about_dialog = None;
-
-         */
     }
 
     pub fn open_configure(app: &mut App) {
