@@ -1,0 +1,4 @@
+pygobject==3.42.2
+requests==2.28.2
+meson==1.0.0
+
