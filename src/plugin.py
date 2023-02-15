@@ -18,6 +18,13 @@ PLUGIN_ICON        = 'sample-plugin'
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
+
+config = {
+    "width": 1920,
+    "scroll_interval_ms": 50
+}
+
+
 class PanelPlugin(Gtk.ScrolledWindow):
     """
     Xfce4 PanelPlugin,
@@ -32,20 +39,20 @@ class PanelPlugin(Gtk.ScrolledWindow):
         This method is called by sample_py_new() method
         """
         super().__init__()
-        self.set_size_request(200, -1)
+        self.set_size_request(config["width"], -1)
         self.set_policy(Gtk.PolicyType.EXTERNAL,
                 Gtk.PolicyType.AUTOMATIC)
+        self.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
         self.my_viewport = Gtk.Viewport()
         self.my_viewport.set_border_width(0)
         # self.my_viewport.set_size_request(1000, 20)
         self.my_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=1)
         start_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=1)
-        start_box.set_size_request(200, -1)
+        start_box.set_size_request(config["width"], -1)
         self.my_box.pack_start(start_box, True, True, 1)
         text = GLib.markup_escape_text('<span foreground="blue" style="italic">Test</span>')
         labels = [f'<a href="http://www.gtk.org" title="{text}">This text is red.</a>', '<a href="http://www.gtk.org" title="To jest title">Cos innego</a>', "trzy3333333333333_E", "cztery4444444444444_E", "piec55555555555555_E"]
         self.my_labels = []
-        # labels = ["                                                                                                 [lblMarquee] Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec metus quam, ullamcorper eu suscipit quis, rutrum sit amet massa.                                                                                                 end......"]
         i = 0
         for label in labels:
             my_label = Gtk.Label()
@@ -57,7 +64,7 @@ class PanelPlugin(Gtk.ScrolledWindow):
             self.my_labels.append(my_label)
             self.my_box.pack_start(my_label, True, True, 1)
         end_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=1)
-        end_box.set_size_request(200, -1)
+        end_box.set_size_request(config["width"], -1)
         self.my_box.pack_end(end_box, True, True, 1)
 
         self.my_viewport.add(self.my_box)
@@ -73,7 +80,7 @@ class PanelPlugin(Gtk.ScrolledWindow):
         #
         self.add(self.my_viewport)
         self.counter = 0
-        self.countdown_event = GLib.timeout_add(133, self.my_scroll_callback)
+        self.countdown_event = GLib.timeout_add(config["scroll_interval_ms"], self.my_scroll_callback)
         #while True:
         #    self.ScrolledWindow.do_scroll_child(Gtk.ScrollType.STEP_LEFT, True)
         #    while Gtk.events_pending():
@@ -105,7 +112,7 @@ class PanelPlugin(Gtk.ScrolledWindow):
             return True
         h_adj: Gtk.Adjustment = self.my_viewport.get_hadjustment()
         h_adj.freeze_notify()
-        n = h_adj.get_upper() - 200
+        n = h_adj.get_upper() - config["width"]
         if n < 1:
             # safety incase we don't have an actual width calculated width
             n = 1
@@ -115,7 +122,7 @@ class PanelPlugin(Gtk.ScrolledWindow):
             self.counter = 0
         else:
             # scroll the marquee to the left by 3px
-            self.counter += 3
+            self.counter += 1
 
         #k = int(1600 / points_to_pixels(self.my_label.get_style_context().get_font(Gtk.StateFlags.NORMAL))[1].height)
         #s = k * " "
