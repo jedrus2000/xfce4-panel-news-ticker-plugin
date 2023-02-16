@@ -1,5 +1,7 @@
-
+use std::time::Duration;
+use glib;
 use gtk::prelude::*;
+use gtk::Adjustment;
 use gtk::Container;
 use gtk::Widget;
 use gdk::EventMask;
@@ -8,45 +10,34 @@ use gdk::EventMask;
 pub struct Ticker {
     #[shrinkwrap(main_field)]
     event_box: gtk::EventBox,
-    pub container: gtk::Box
+    pub container: gtk::ScrolledWindow,
+    counter: i32,
 }
 
 pub const WIDTH: i32 = 500;
 
 impl Ticker {
     pub fn new () -> Self {
+        let counter= 0;
         let event_box = gtk::EventBox::new();
-        let hadj = gtk::Adjustment::new(0 as f64, 0 as f64, 1000 as f64, 1 as f64, 20 as f64, 20 as f64);
-        let vadj = gtk::Adjustment::new(0 as f64, 0 as f64, 0 as f64, 0 as f64, 0 as f64, 0 as f64);
-        /*
         let container = gtk::ScrolledWindow::builder()
-            .hadjustment(&hadj)
-            .vadjustment(&vadj)
+            .width_request(WIDTH)
+            .events(gdk::EventMask::BUTTON_PRESS_MASK)
+            .hscrollbar_policy(gtk::PolicyType::External)
+            .vscrollbar_policy(gtk::PolicyType::Automatic)
             .build();
-        container.set_size_request(WIDTH, -1);
-        container.set_policy(gtk::PolicyType::External,
-                             gtk::PolicyType::Automatic);
-        container.set_events(gdk::EventMask::BUTTON_PRESS_MASK);
-         */
-        let container = gtk::Box::new(gtk::Orientation::Horizontal, 1);
-        // container.show();
         let my_viewport = gtk::Viewport::builder()
-            .hadjustment(&hadj)
-            .vadjustment(&vadj)
+            .border_width(0)
+            .width_request(WIDTH)
             .build();
-        my_viewport.set_border_width(0);
-        // my_viewport.show();
         let my_box = gtk::Box::new(gtk::Orientation::Horizontal, 1);
-        // my_box.show();
         let start_box = gtk::Box::new(gtk::Orientation::Horizontal, 1);
-        // start_box.show();
-        start_box.set_size_request(WIDTH, -1);
+        start_box.set_size_request(1, -1);
         my_box.pack_start(&start_box, true, true, 1);
         // text = GLib.markup_escape_text('<span foreground="blue" style="italic">Test</span>')
         let labels = ["jeden1111111111111", "dwa", "trzy3333333333333_E", "cztery4444444444444_E", "piec55555555555555_E"];
         labels.map(|s| {
-            let my_label = gtk::Label::new(Some("aaaaaa")); // Some(s));
-            // my_label.show();
+            let my_label = gtk::Label::new(Some(s));
             /*
             my_label.set_events(Gdk.EventMask.ENTER_NOTIFY_MASK)
             my_label.connect("enter-notify-event", self.on_label_enter)
@@ -58,21 +49,28 @@ impl Ticker {
         end_box.set_size_request(WIDTH, -1);
         // end_box.show();
         my_box.pack_end(&end_box, true, true, 1);
-        /*
         my_viewport.add(&my_box);
         container.add(&my_viewport);
-         */
-        container.pack_start(&my_box, true, true, 1);
         event_box.add(&container);
         event_box.show_all();
-
-        Ticker {
+        let mut ticker = Ticker {
             event_box,
-            container
-        }
+            container,
+            counter,
+        };
+        ticker
     }
 
     pub fn as_widget (&self) -> &gtk::EventBox {
         &self.event_box
+    }
+
+    pub fn scroll_ticker(&mut self) {
+        let scroll = move || {
+            self.counter += 1;
+            eprintln!("count = {}", self.counter);
+            glib::Continue(true)
+        };
+        glib::timeout_add_local(Duration::from_millis(100), scroll);
     }
 }

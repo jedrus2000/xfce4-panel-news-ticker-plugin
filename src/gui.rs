@@ -1,4 +1,3 @@
-
 use gtk::prelude::*;
 use crate::xfce::{plugin::XfcePanelPlugin, ffi::*};
 use std::convert::TryInto;
@@ -64,7 +63,7 @@ impl Gui {
 
         let window: gtk::Window = plugin_container.parent().unwrap().downcast().unwrap();
 
-        let ticker = ui::ticker::Ticker::new();
+        let mut ticker = ui::ticker::Ticker::new();
         plugin_container.add(ticker.as_widget());
 
         /*
@@ -83,6 +82,7 @@ impl Gui {
 
         let menu_item_refresh_button = gtk::MenuItem::with_label("Refresh");
         plugin.menu_insert_item(&menu_item_refresh_button);
+        ticker.scroll_ticker();
 
         let gui = Gui {
             tx,
@@ -104,7 +104,6 @@ impl Gui {
         };
 
         gui.connect_plugin();
-
         return gui;
     }
 
