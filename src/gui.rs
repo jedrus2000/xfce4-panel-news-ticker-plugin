@@ -40,7 +40,9 @@ pub struct Gui {
     pub window: gtk::Window,
     /*
     pub icons: icon::IconSet,
-    pub panel_box: ui::panel_box::PanelBox,
+    */
+    pub ticker: ui::ticker::Ticker,
+    /*
     pub panel_icon: ui::panel_icon::PanelIcon,
     */
     pub about_dialog: Option<AboutDialog>,
@@ -62,10 +64,10 @@ impl Gui {
 
         let window: gtk::Window = plugin_container.parent().unwrap().downcast().unwrap();
 
-        /*
-        let panel_box = ui::panel_box::PanelBox::new();
-        plugin_container.add(panel_box.as_widget());
+        let ticker = ui::ticker::Ticker::new();
+        plugin_container.add(ticker.as_widget());
 
+        /*
         let panel_icon = ui::panel_icon::PanelIcon::new();
         panel_box.container.add(panel_icon.as_widget());
         */
@@ -86,8 +88,8 @@ impl Gui {
             tx,
             plugin,
             window,
+            ticker,
             /*
-            panel_box,
             panel_icon,
             icons: icon::IconSet::new(30),
             config_dialog: None,
