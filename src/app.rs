@@ -1,4 +1,4 @@
-
+use std::time::Duration;
 use crate::state::{State, StateEvent};
 use crate::gui::{Gui, GuiEvent};
 // use crate::config::{Config, ConfigEvent};
@@ -8,6 +8,7 @@ use crate::xfce::ffi::XfcePanelPluginPointer;
 
 pub enum AppEvent {
     Init,
+    Ticker,
     StateEvent(StateEvent),
     GuiEvent(GuiEvent),
     /*
@@ -19,7 +20,9 @@ pub enum AppEvent {
 pub struct App {
     pub tx: glib::Sender<AppEvent>,
     pub state: State,
-    pub gui: Gui,/*
+    pub gui: Gui,
+    pub counter: i32,
+    /*
     pub config: Config,
     pub feed: Feed
     */
@@ -31,10 +34,13 @@ impl App {
         let state = State::new();
         // let config = Config::new();
         // let feed = Feed::new();
+        let mut counter = 0;
         return App {
             tx,
             state,
-            gui,/*
+            gui,
+            counter,
+            /*
             config,
             feed*/
         }
@@ -56,6 +62,14 @@ impl App {
                 Feed::reducer(self, event);
             }
              */
+            AppEvent::Ticker => {
+                self.counter += 1;
+                eprintln!("Tick ! {}", self.counter);
+                let zx = self.tx.clone();
+                glib::timeout_add_local_once(Duration::from_millis(500), move || {
+                    zx.send(AppEvent::Ticker);
+                });
+            }
             AppEvent::Init => self.init()
         };
         // Handle when to update?
@@ -80,8 +94,9 @@ impl App {
 
     pub fn start (pointer: XfcePanelPluginPointer) {
         let (tx, rx) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
-        let mut app = App::new(pointer, tx);
+        let mut app = App::new(pointer, tx.clone());
         app.dispatch(AppEvent::Init);
+        app.dispatch(AppEvent::Ticker);
         rx.attach(None, move |event| {
             app.reducer(event);
             glib::Continue(true)

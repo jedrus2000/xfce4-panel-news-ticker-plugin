@@ -1,3 +1,7 @@
+use std::rc::Rc;
+use std::cell::RefCell;
+use std::sync::Mutex;
+use std::boxed::Box;
 use std::time::Duration;
 use glib;
 use gtk::prelude::*;
@@ -53,7 +57,7 @@ impl Ticker {
         container.add(&my_viewport);
         event_box.add(&container);
         event_box.show_all();
-        let mut ticker = Ticker {
+        let ticker = Ticker {
             event_box,
             container,
             counter,
@@ -65,12 +69,4 @@ impl Ticker {
         &self.event_box
     }
 
-    pub fn scroll_ticker(&mut self) {
-        let scroll = move || {
-            self.counter += 1;
-            eprintln!("count = {}", self.counter);
-            glib::Continue(true)
-        };
-        glib::timeout_add_local(Duration::from_millis(100), scroll);
-    }
 }

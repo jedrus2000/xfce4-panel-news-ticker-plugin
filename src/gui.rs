@@ -82,7 +82,6 @@ impl Gui {
 
         let menu_item_refresh_button = gtk::MenuItem::with_label("Refresh");
         plugin.menu_insert_item(&menu_item_refresh_button);
-        ticker.scroll_ticker();
 
         let gui = Gui {
             tx,
