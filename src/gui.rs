@@ -72,7 +72,7 @@ impl Gui {
         plugin_container.show_all();
         plugin.show_about();
         plugin.show_configure();
-        
+
         let menu_item_error_message = gtk::MenuItem::new();
         /*
         menu_item_error_message.override_color(gtk::StateFlags::NORMAL, Some(&gdk::RGBA{red: 0.9, green: 0.1, blue: 0.1, alpha: 1.0}));
