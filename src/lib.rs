@@ -19,6 +19,7 @@ mod feed;
 */
 mod ui;
 mod app;
+mod feed;
 
 
 use crate::{

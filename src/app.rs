@@ -1,11 +1,14 @@
 use std::time::Duration;
-use glib_sys::gboolean;
+use glib::Continue;
 use crate::state::{State, StateEvent};
 use crate::gui::{Gui, GuiEvent};
 // use crate::config::{Config, ConfigEvent};
-// use crate::feed::{Feed, FeedEvent};
-use crate::xfce::ffi::XfcePanelPluginPointer;
-use crate::xfce::ffi::xfce_panel_plugin_save_location;
+use crate::feed::{ Feed, FeedEvent};
+use crate::feed::FeedEvent::Fetch;
+use crate::xfce::ffi::{
+    XfcePanelPluginPointer,
+    xfce_panel_plugin_save_location
+};
 use crate::xfce::plugin::XfcePanelPlugin;
 
 pub enum AppEvent {
@@ -15,8 +18,8 @@ pub enum AppEvent {
     GuiEvent(GuiEvent),
     /*
     ConfigEvent(ConfigEvent),
-    FeedEvent(FeedEvent),
     */
+    FeedEvent(FeedEvent),
 }
 
 pub struct App {
@@ -24,10 +27,11 @@ pub struct App {
     pub state: State,
     pub gui: Gui,
     pub counter: i32,
+    pub stop: bool,
     /*
     pub config: Config,
-    pub feed: Feed
     */
+    pub feed: Feed
 }
 
 impl App {
@@ -35,16 +39,16 @@ impl App {
         let gui = Gui::new(pointer, tx.clone());
         let state = State::new();
         // let config = Config::new();
-        // let feed = Feed::new();
-        let mut counter = 0;
+        let feed = Feed::new(&state);
         return App {
             tx,
             state,
             gui,
-            counter,
+            counter: 0,
+            stop: false,
+            feed,
             /*
-            config,
-            feed*/
+            config,*/
         }
     }
 
@@ -65,6 +69,7 @@ impl App {
             }
              */
             AppEvent::Ticker => {
+                if self.stop { return; }
                 let tx = self.tx.clone();
                 if self.counter == 0 {
                     tx.send(AppEvent::GuiEvent(GuiEvent::CreateTickerContent));
@@ -76,7 +81,19 @@ impl App {
                     tx.send(AppEvent::Ticker);
                 });
             }
-            AppEvent::Init => self.init()
+            AppEvent::FeedEvent(Fetch) => {
+                let tx = self.tx.clone();
+                let state = State::new();
+                glib::timeout_add_local_once(Duration::from_secs(600), move || {
+                    let f = Feed::new(&state);
+                    tx.send(AppEvent::FeedEvent(Fetch));
+                });
+
+            }
+            AppEvent::FeedEvent(FeedEvent::Fetched(result)) => {
+            }
+            AppEvent::Init => self.init(),
+            _ => {}
         };
         // Handle when to update?
         Gui::update(self);
