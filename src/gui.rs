@@ -16,6 +16,7 @@ use crate::ui::{
     feed_dialog::FeedDialog
      */
 };
+use crate::ui::ticker::{Ticker, WIDTH};
 /*
 use crate::res::icon;
 */
@@ -29,7 +30,8 @@ pub enum Dialog {
 pub enum GuiEvent {
     Open(Dialog),
     Destroyed(Dialog),
-    Toggle(Dialog)
+    Toggle(Dialog),
+    MoveTicker,
     // Close(Dialog)
 }
 
@@ -51,7 +53,8 @@ pub struct Gui {
      */
     menu_item_error_message: gtk::MenuItem,
     menu_item_refresh_button: gtk::MenuItem,
-    menu_item_refresh_connection: Option<glib::SignalHandlerId>
+    menu_item_refresh_connection: Option<glib::SignalHandlerId>,
+    stop : bool
 }
 
 
@@ -99,13 +102,31 @@ impl Gui {
              */
             menu_item_error_message,
             menu_item_refresh_button,
-            menu_item_refresh_connection: None
+            menu_item_refresh_connection: None,
+            stop: false,
         };
 
         gui.connect_plugin();
         return gui;
     }
 
+    pub fn move_ticker(app: &mut App) {
+        if app.gui.stop {
+            return
+        }
+        let h_adj = app.gui.ticker.viewport.hadjustment().unwrap();
+        // missing h_adj.thaw_notify(); let _ = h_adj.freeze_notify();
+        let mut n = h_adj.upper() - WIDTH as f64;
+        if n < 1.0 {
+            // safety incase we don't have an actual width calculated width
+            n = 1.0;
+        }
+        if app.counter as f64 >= n {
+            // we've reached the end.  reset the marquee to the 0-position.
+            app.counter = 0;
+        }
+        h_adj.set_value(app.counter as f64);
+    }
 
     pub fn reducer(app: &mut App, event: AppEvent) {
         if let AppEvent::GuiEvent(event) = event {
@@ -130,6 +151,9 @@ impl Gui {
                 }
                 GuiEvent::Toggle(Dialog::Feed) => {
                     Gui::toggle_feed(app);
+                }
+                GuiEvent::MoveTicker => {
+                    Gui::move_ticker(app);
                 }
                 _ => {}
             };

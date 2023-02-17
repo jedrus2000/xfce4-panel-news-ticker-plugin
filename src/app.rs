@@ -1,10 +1,13 @@
 use std::time::Duration;
+use glib_sys::gboolean;
 use crate::state::{State, StateEvent};
 use crate::gui::{Gui, GuiEvent};
+use crate::gui::GuiEvent::MoveTicker;
 // use crate::config::{Config, ConfigEvent};
 // use crate::feed::{Feed, FeedEvent};
 use crate::xfce::ffi::XfcePanelPluginPointer;
-
+use crate::xfce::ffi::xfce_panel_plugin_save_location;
+use crate::xfce::plugin::XfcePanelPlugin;
 
 pub enum AppEvent {
     Init,
@@ -64,10 +67,11 @@ impl App {
              */
             AppEvent::Ticker => {
                 self.counter += 1;
-                eprintln!("Tick ! {}", self.counter);
-                let zx = self.tx.clone();
-                glib::timeout_add_local_once(Duration::from_millis(500), move || {
-                    zx.send(AppEvent::Ticker);
+                // eprintln!("Tick ! {}", self.counter);
+                let tx = self.tx.clone();
+                tx.send(AppEvent::GuiEvent(MoveTicker));
+                glib::timeout_add_local_once(Duration::from_millis(66), move || {
+                    tx.send(AppEvent::Ticker);
                 });
             }
             AppEvent::Init => self.init()
@@ -95,6 +99,8 @@ impl App {
     pub fn start (pointer: XfcePanelPluginPointer) {
         let (tx, rx) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
         let mut app = App::new(pointer, tx.clone());
+        let plugin = XfcePanelPlugin::from(pointer);
+        eprintln!("{}", plugin.save_location(true).unwrap());
         app.dispatch(AppEvent::Init);
         app.dispatch(AppEvent::Ticker);
         rx.attach(None, move |event| {

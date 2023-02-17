@@ -15,7 +15,7 @@ pub struct Ticker {
     #[shrinkwrap(main_field)]
     event_box: gtk::EventBox,
     pub container: gtk::ScrolledWindow,
-    counter: i32,
+    pub viewport: gtk::Viewport
 }
 
 pub const WIDTH: i32 = 500;
@@ -30,13 +30,13 @@ impl Ticker {
             .hscrollbar_policy(gtk::PolicyType::External)
             .vscrollbar_policy(gtk::PolicyType::Automatic)
             .build();
-        let my_viewport = gtk::Viewport::builder()
+        let viewport = gtk::Viewport::builder()
             .border_width(0)
             .width_request(WIDTH)
             .build();
         let my_box = gtk::Box::new(gtk::Orientation::Horizontal, 1);
         let start_box = gtk::Box::new(gtk::Orientation::Horizontal, 1);
-        start_box.set_size_request(1, -1);
+        start_box.set_size_request(WIDTH, -1);
         my_box.pack_start(&start_box, true, true, 1);
         // text = GLib.markup_escape_text('<span foreground="blue" style="italic">Test</span>')
         let labels = ["jeden1111111111111", "dwa", "trzy3333333333333_E", "cztery4444444444444_E", "piec55555555555555_E"];
@@ -53,16 +53,15 @@ impl Ticker {
         end_box.set_size_request(WIDTH, -1);
         // end_box.show();
         my_box.pack_end(&end_box, true, true, 1);
-        my_viewport.add(&my_box);
-        container.add(&my_viewport);
+        viewport.add(&my_box);
+        container.add(&viewport);
         event_box.add(&container);
         event_box.show_all();
-        let ticker = Ticker {
+        Ticker {
             event_box,
             container,
-            counter,
-        };
-        ticker
+            viewport
+        }
     }
 
     pub fn as_widget (&self) -> &gtk::EventBox {
