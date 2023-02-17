@@ -27,11 +27,10 @@ impl Ticker {
             .hscrollbar_policy(gtk::PolicyType::External)
             .vscrollbar_policy(gtk::PolicyType::Automatic)
             .build();
-        let viewport = gtk::Viewport::builder()
+        let mut viewport = gtk::Viewport::builder()
             .border_width(0)
             .width_request(width)
             .build();
-        Ticker::create_ticker_content(&viewport, width);
         container.add(&viewport);
         event_box.add(&container);
         event_box.show_all();
@@ -42,27 +41,32 @@ impl Ticker {
         }
     }
 
-    pub fn create_ticker_content(viewport : &gtk::Viewport, width: i32) {
+    pub fn create_ticker_content(viewport : &gtk::Viewport, width: i32, labels: &[&str]) {
+        for child in viewport.children() {
+            unsafe {
+                child.destroy();
+            }
+        }
         let my_box = gtk::Box::new(gtk::Orientation::Horizontal, 1);
         let start_box = gtk::Box::new(gtk::Orientation::Horizontal, 1);
         start_box.set_size_request(width, -1);
         my_box.pack_start(&start_box, true, true, 1);
         // text = GLib.markup_escape_text('<span foreground="blue" style="italic">Test</span>')
-        let labels = ["jeden1111111111111", "dwa", "trzy3333333333333_E", "cztery4444444444444_E", "piec55555555555555_E"];
-        labels.map(|s| {
-            let my_label = gtk::Label::new(Some(s));
+        for label in labels {
+            let my_label = gtk::Label::new(Some(label));
             /*
             my_label.set_events(Gdk.EventMask.ENTER_NOTIFY_MASK)
             my_label.connect("enter-notify-event", self.on_label_enter)
             my_label.connect("leave-notify-event", self.on_label_leave)
             */
             my_box.pack_start(&my_label, true, true, 1);
-        });
+        };
         let end_box = gtk::Box::new(gtk::Orientation::Horizontal, 1);
         end_box.set_size_request(width, -1);
         // end_box.show();
         my_box.pack_end(&end_box, true, true, 1);
         viewport.add(&my_box);
+        viewport.show_all();
     }
 
     pub fn as_widget (&self) -> &gtk::EventBox {

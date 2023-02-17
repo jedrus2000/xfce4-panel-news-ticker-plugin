@@ -32,6 +32,7 @@ pub enum GuiEvent {
     Destroyed(Dialog),
     Toggle(Dialog),
     MoveTicker,
+    CreateTickerContent,
     // Close(Dialog)
 }
 
@@ -155,6 +156,9 @@ impl Gui {
                 }
                 GuiEvent::MoveTicker => {
                     Gui::move_ticker(app);
+                }
+                GuiEvent::CreateTickerContent => {
+                    Ticker::create_ticker_content(&app.gui.ticker.viewport, 500, &["aaaaa", "bbbbb"]);
                 }
                 _ => {}
             };

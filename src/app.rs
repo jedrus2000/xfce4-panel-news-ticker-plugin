@@ -2,7 +2,6 @@ use std::time::Duration;
 use glib_sys::gboolean;
 use crate::state::{State, StateEvent};
 use crate::gui::{Gui, GuiEvent};
-use crate::gui::GuiEvent::MoveTicker;
 // use crate::config::{Config, ConfigEvent};
 // use crate::feed::{Feed, FeedEvent};
 use crate::xfce::ffi::XfcePanelPluginPointer;
@@ -66,10 +65,13 @@ impl App {
             }
              */
             AppEvent::Ticker => {
+                let tx = self.tx.clone();
+                if self.counter == 0 {
+                    tx.send(AppEvent::GuiEvent(GuiEvent::CreateTickerContent));
+                }
                 self.counter += 1;
                 // eprintln!("Tick ! {}", self.counter);
-                let tx = self.tx.clone();
-                tx.send(AppEvent::GuiEvent(MoveTicker));
+                tx.send(AppEvent::GuiEvent(GuiEvent::MoveTicker));
                 glib::timeout_add_local_once(Duration::from_millis(66), move || {
                     tx.send(AppEvent::Ticker);
                 });
