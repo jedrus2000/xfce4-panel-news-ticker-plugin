@@ -16,7 +16,7 @@ use crate::ui::{
     feed_dialog::FeedDialog
      */
 };
-use crate::ui::ticker::{Ticker, WIDTH};
+use crate::ui::ticker::{Ticker};
 /*
 use crate::res::icon;
 */
@@ -66,7 +66,7 @@ impl Gui {
 
         let window: gtk::Window = plugin_container.parent().unwrap().downcast().unwrap();
 
-        let mut ticker = ui::ticker::Ticker::new();
+        let ticker = ui::ticker::Ticker::new(500);
         plugin_container.add(ticker.as_widget());
 
         /*
@@ -111,12 +111,13 @@ impl Gui {
     }
 
     pub fn move_ticker(app: &mut App) {
+        let width: i32 = 500;
         if app.gui.stop {
             return
         }
         let h_adj = app.gui.ticker.viewport.hadjustment().unwrap();
         // missing h_adj.thaw_notify(); let _ = h_adj.freeze_notify();
-        let mut n = h_adj.upper() - WIDTH as f64;
+        let mut n = h_adj.upper() - width as f64;
         if n < 1.0 {
             // safety incase we don't have an actual width calculated width
             n = 1.0;
