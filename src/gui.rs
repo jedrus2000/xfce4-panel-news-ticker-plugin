@@ -1,6 +1,5 @@
 use gtk::prelude::*;
 use crate::xfce::{plugin::XfcePanelPlugin, ffi::*};
-use std::convert::TryInto;
 
 use crate::app::{App, AppEvent};
 use crate::state::{StateEvent};

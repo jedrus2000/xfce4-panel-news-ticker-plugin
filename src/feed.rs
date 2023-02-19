@@ -3,6 +3,7 @@ use crate::app::{App, AppEvent};
 use crate::state::{State, ErrorType, StateEvent};
 use glib::SourceId;
 use glib::translate::{FromGlib, IntoGlib};
+use futures::future::join_all;
 /*
 use crate::config::Config;
 */
@@ -33,8 +34,22 @@ impl Feed {
         }
     }
 
+    async fn example_async_function_1(input: u32) -> u32 {
+        // Asynchronous code here
+        input + 1
+    }
+    pub fn fetch_feed(app: &mut App) {
+        let inputs = vec![1, 2, 3, 4, 5];
+        let mut results: Vec<u32> = vec![];
+        async {
+            let mut futures = vec![];
+            for input in inputs {
+                futures.push(Feed::example_async_function_1(input));
+            }
+            results = join_all(futures).await;
+        };
+        println!("Results: {:?}", results);
 
-    fn fetch_feed(app: &mut App) {
         /*
         if !app.config.active {
             return;
