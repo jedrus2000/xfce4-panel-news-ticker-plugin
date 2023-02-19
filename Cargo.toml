@@ -23,7 +23,7 @@ gobject-sys = "0.17.0"
 gdk-sys = "0.17.0"
 gdk = "0.17.0"
 rss = "2.0.2"
-reqwest = { version = "0.11.14", features = ["blocking"] }
+reqwest = { version = "0.11.14" }
 # tokio = { version = "1.25.0", features = ["macros"] }
 futures = "0.3.26"
 shrinkwraprs = "0.3.0"
