@@ -1,7 +1,7 @@
 use std::time::Duration;
 use crate::state::{State, StateEvent};
 use crate::gui::{Gui, GuiEvent};
-// use crate::config::{Config, ConfigEvent};
+use crate::config::{Config, ConfigEvent};
 use crate::feed::{ Feed, FeedEvent};
 use crate::feed::FeedEvent::Fetch;
 use crate::xfce::ffi::{
@@ -16,9 +16,7 @@ pub enum AppEvent {
     Ticker,
     StateEvent(StateEvent),
     GuiEvent(GuiEvent),
-    /*
     ConfigEvent(ConfigEvent),
-    */
     FeedEvent(FeedEvent),
 }
 
@@ -28,29 +26,27 @@ pub struct App {
     pub gui: Gui,
     pub counter: i32,
     pub stop: bool,
-    /*
     pub config: Config,
-    */
     pub feed: Feed
 }
 
 impl App {
     pub fn new (pointer: XfcePanelPluginPointer, tx: glib::Sender<AppEvent>) -> Self {
-        let gui = Gui::new(pointer, tx.clone());
         let state = State::new();
-        // let config = Config::new();
+        let config = Config::new();
         let feed = Feed::fetch_feed(&state);
-        ticker::Ticker::create_ticker_content(&gui.ticker.viewport, 500, &feed.items);
-        return App {
+        let gui = Gui::new(pointer, &config, tx.clone());
+        let app = App {
             tx,
             state,
             gui,
             counter: 0,
             stop: false,
             feed,
-            /*
-            config,*/
-        }
+            config,
+        };
+        ticker::Ticker::create_ticker_content(&app, &app.feed.items);
+        app
     }
 
     pub fn reducer(&mut self, event: AppEvent) {
@@ -79,7 +75,7 @@ impl App {
                 self.counter += 1;
                 // eprintln!("Tick ! {}", self.counter);
                 tx.send(AppEvent::GuiEvent(GuiEvent::MoveTicker));
-                glib::timeout_add_local_once(Duration::from_millis(66), move || {
+                glib::timeout_add_local_once(Duration::from_millis(33), move || {
                     tx.send(AppEvent::Ticker);
                 });
             }

@@ -4,7 +4,7 @@ use crate::state::{State, ErrorType, StateEvent};
 use glib::SourceId;
 use glib::translate::{FromGlib, IntoGlib};
 use futures::future::join_all;
-use futures::executor::block_on;
+use tokio;
 use rss::Channel;
 /*
 use crate::config::Config;
@@ -38,7 +38,7 @@ impl Feed {
 
     async fn get_rss_from_url(url: &str) -> rss::Channel {
         let content = reqwest::get(url).await;
-        eprintln!("{:?}", content);
+        // eprintln!("{:?}", content);
         let channel = match content {
             Err(err) => {
                 Err(("ErrorType::UrlRequestError(err)"))
@@ -54,15 +54,17 @@ impl Feed {
     }
     pub fn fetch_feed(state: &State) -> Self {
         let inputs = vec!["https://rss.app/feeds/nCUE2hocDXI0wsUt.xml"];
-        let mut results: Vec<Channel> = vec![];
-        let mut futures = vec![];
-        for input in inputs {
-            futures.push(Feed::get_rss_from_url(input));
-        }
-        results = block_on(async {
-            join_all(futures).await
-        });
-        eprintln!("{:?}", results);
+        let mut results: Vec<Channel> =
+            tokio::runtime::Runtime::new()
+                .unwrap()
+                .block_on(async {
+                    let mut futures = vec![];
+                    for input in inputs {
+                        futures.push(Feed::get_rss_from_url(input));
+                    }
+                    join_all(futures).await
+                });
+        // eprintln!("{:?}", results);
         let mut feed = Feed::new(state);
         for channel in results {
             for item in channel.items {

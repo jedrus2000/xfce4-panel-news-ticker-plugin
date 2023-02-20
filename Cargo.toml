@@ -13,17 +13,19 @@ crate-type = ["staticlib", "cdylib"]
 
 [dependencies]
 libc = "0.2"
-gtk = "0.17.0"
-gtk-sys = "0.17.0"
-gdk-pixbuf = "0.17.0"
-gio = "0.17.0"
-glib = "0.17.1"
-glib-sys = "0.17.0"
-gobject-sys = "0.17.0"
-gdk-sys = "0.17.0"
-gdk = "0.17.0"
+gtk = "0.16.2"
+gtk-sys = "0.16.0"
+gdk-pixbuf = "0.16.7"
+gio = "0.16.7"
+glib = "0.16.7"
+glib-sys = "0.16.3"
+gobject-sys = "0.16.3"
+gdk-sys = "0.16.0"
+gdk = "0.16.2"
 rss = "2.0.2"
 reqwest = { version = "0.11.14" }
-# tokio = { version = "1.25.0", features = ["macros"] }
+tokio = { version = "1.25.0", features = ["macros", "rt-multi-thread"] }
 futures = { version = "0.3.26", features = ["executor"] }
 shrinkwraprs = "0.3.0"
+webkit2gtk = { version = "0.19.2", features = ["v2_6"] }
+

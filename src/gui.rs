@@ -3,10 +3,8 @@ use crate::xfce::{plugin::XfcePanelPlugin, ffi::*};
 
 use crate::app::{App, AppEvent};
 use crate::state::{StateEvent};
-/*
-use crate::config::{ConfigEvent};
+use crate::config::{Config, ConfigEvent};
 use crate::feed::{FeedEvent};
-*/
 use crate::ui;
 use crate::ui::{
     about_dialog::AboutDialog,
@@ -59,14 +57,14 @@ pub struct Gui {
 
 
 impl Gui {
-    pub fn new (pointer: XfcePanelPluginPointer, tx: glib::Sender<AppEvent>) -> Self {
+    pub fn new (pointer: XfcePanelPluginPointer, config: &Config, tx: glib::Sender<AppEvent>) -> Self {
         let mut plugin = XfcePanelPlugin::from(pointer);
 
         let plugin_container = plugin.container.clone();
 
         let window: gtk::Window = plugin_container.parent().unwrap().downcast().unwrap();
 
-        let ticker = ui::ticker::Ticker::new(500);
+        let ticker = ui::ticker::Ticker::new(config.width);
         plugin_container.add(ticker.as_widget());
 
         /*
@@ -111,7 +109,7 @@ impl Gui {
     }
 
     pub fn move_ticker(app: &mut App) {
-        let width: i32 = 500;
+        let width: i32 = app.config.width;
         if app.gui.stop {
             return
         }
@@ -157,7 +155,7 @@ impl Gui {
                     Gui::move_ticker(app);
                 }
                 GuiEvent::CreateTickerContent(items) => {
-                    Ticker::create_ticker_content(&app.gui.ticker.viewport, 500, &items);
+                    Ticker::create_ticker_content(&app,&items);
                 }
                 _ => {}
             };

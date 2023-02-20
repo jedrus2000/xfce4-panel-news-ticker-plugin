@@ -13,12 +13,10 @@ mod res;
 mod xfce;
 mod state;
 mod gui;
-/*
-mod config;
-*/
 mod ui;
 mod app;
 mod feed;
+mod config;
 
 
 use crate::{

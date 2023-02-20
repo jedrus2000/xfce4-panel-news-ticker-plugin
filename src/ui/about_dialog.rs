@@ -12,11 +12,13 @@ impl AboutDialog {
             .title("About")
             .version(crate::res::VERSION)
             .program_name(crate::res::APP_NAME)
+            /*
             .authors(crate::res::AUTHORS
                 .to_string()
                 .split(':')
                 .collect::<Vec<&str>>()
             )
+             */
             .window_position(gtk::WindowPosition::Center)
             .transient_for(parent)
             .destroy_with_parent(true)
