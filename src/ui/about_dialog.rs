@@ -1,9 +1,5 @@
-use std::io;
 use gtk;
-use gtk::Dialog;
-use gtk::Widget;
 use gtk::prelude::*;
-use glib::GString;
 
 #[derive(Shrinkwrap)]
 pub struct AboutDialog {

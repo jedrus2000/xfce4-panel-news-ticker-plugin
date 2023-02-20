@@ -15,7 +15,6 @@ mod state;
 mod gui;
 /*
 mod config;
-mod feed;
 */
 mod ui;
 mod app;

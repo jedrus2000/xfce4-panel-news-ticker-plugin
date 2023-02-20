@@ -1,14 +1,4 @@
-use std::rc::Rc;
-use std::cell::RefCell;
-use std::sync::Mutex;
-use std::boxed::Box;
-use std::time::Duration;
-use glib;
 use gtk::prelude::*;
-use gtk::Adjustment;
-use gtk::Container;
-use gtk::Widget;
-use gdk::EventMask;
 
 #[derive(Shrinkwrap)]
 pub struct Ticker {
@@ -41,7 +31,7 @@ impl Ticker {
         }
     }
 
-    pub fn create_ticker_content(viewport : &gtk::Viewport, width: i32, labels: &[&str]) {
+    pub fn create_ticker_content(viewport : &gtk::Viewport, width: i32, items: &Vec<rss::Item>) {
         for child in viewport.children() {
             unsafe {
                 child.destroy();
@@ -52,8 +42,10 @@ impl Ticker {
         start_box.set_size_request(width, -1);
         my_box.pack_start(&start_box, true, true, 1);
         // text = GLib.markup_escape_text('<span foreground="blue" style="italic">Test</span>')
-        for label in labels {
-            let my_label = gtk::Label::new(Some(label));
+        for item in items {
+            let title = item.title.clone().unwrap();
+            eprintln!("{:?}", title);
+            let my_label = gtk::Label::new(Some(title.as_str()));
             /*
             my_label.set_events(Gdk.EventMask.ENTER_NOTIFY_MASK)
             my_label.connect("enter-notify-event", self.on_label_enter)

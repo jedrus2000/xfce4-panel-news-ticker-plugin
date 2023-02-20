@@ -1,5 +1,4 @@
 use std::time::Duration;
-use glib::Continue;
 use crate::state::{State, StateEvent};
 use crate::gui::{Gui, GuiEvent};
 // use crate::config::{Config, ConfigEvent};
@@ -10,6 +9,7 @@ use crate::xfce::ffi::{
     xfce_panel_plugin_save_location
 };
 use crate::xfce::plugin::XfcePanelPlugin;
+use crate::ui::ticker;
 
 pub enum AppEvent {
     Init,
@@ -39,7 +39,8 @@ impl App {
         let gui = Gui::new(pointer, tx.clone());
         let state = State::new();
         // let config = Config::new();
-        let feed = Feed::new(&state);
+        let feed = Feed::fetch_feed(&state);
+        ticker::Ticker::create_ticker_content(&gui.ticker.viewport, 500, &feed.items);
         return App {
             tx,
             state,
@@ -72,7 +73,8 @@ impl App {
                 if self.stop { return; }
                 let tx = self.tx.clone();
                 if self.counter == 0 {
-                    tx.send(AppEvent::GuiEvent(GuiEvent::CreateTickerContent));
+                    let items = self.feed.items.clone();
+                    tx.send(AppEvent::GuiEvent(GuiEvent::CreateTickerContent(items)));
                 }
                 self.counter += 1;
                 // eprintln!("Tick ! {}", self.counter);
@@ -85,12 +87,14 @@ impl App {
                 let tx = self.tx.clone();
                 let state = State::new();
                 glib::timeout_add_local_once(Duration::from_secs(600), move || {
-                    let f = Feed::new(&state);
+                    let f = Feed::fetch_feed(&state);
+                    tx.send(AppEvent::FeedEvent(FeedEvent::Fetched(Some(f))));
                     tx.send(AppEvent::FeedEvent(Fetch));
                 });
 
             }
             AppEvent::FeedEvent(FeedEvent::Fetched(result)) => {
+                self.feed = result.unwrap();
             }
             AppEvent::Init => self.init(),
             _ => {}
@@ -122,6 +126,7 @@ impl App {
         eprintln!("{}", plugin.save_location(true).unwrap());
         app.dispatch(AppEvent::Init);
         app.dispatch(AppEvent::Ticker);
+        app.dispatch(AppEvent::FeedEvent(Fetch));
         rx.attach(None, move |event| {
             app.reducer(event);
             glib::Continue(true)
