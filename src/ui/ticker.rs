@@ -82,7 +82,6 @@ impl Ticker {
             });
             let tx_leave_notify = app.tx.clone();
             my_label.connect_leave_notify_event(move |label, _event| {
-                eprintln!("Leave notify event received for label {:?} {:?}", label, _event);
                 tx_leave_notify.send(AppEvent::StartMoving);
                 gtk::Inhibit(false)
             });
