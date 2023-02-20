@@ -14,6 +14,8 @@ use crate::ui::ticker;
 pub enum AppEvent {
     Init,
     Ticker,
+    StopMoving,
+    StartMoving,
     StateEvent(StateEvent),
     GuiEvent(GuiEvent),
     ConfigEvent(ConfigEvent),
@@ -65,16 +67,22 @@ impl App {
                 Feed::reducer(self, event);
             }
              */
+            AppEvent::StopMoving => {
+                self.stop = true;
+            }
+            AppEvent::StartMoving => {
+                self.stop = false;
+            }
             AppEvent::Ticker => {
-                if self.stop { return; }
                 let tx = self.tx.clone();
                 if self.counter == 0 {
                     let items = self.feed.items.clone();
                     tx.send(AppEvent::GuiEvent(GuiEvent::CreateTickerContent(items)));
                 }
-                self.counter += 1;
-                // eprintln!("Tick ! {}", self.counter);
-                tx.send(AppEvent::GuiEvent(GuiEvent::MoveTicker));
+                if !self.stop {
+                    self.counter += 1;
+                    tx.send(AppEvent::GuiEvent(GuiEvent::MoveTicker));
+                }
                 glib::timeout_add_local_once(Duration::from_millis(33), move || {
                     tx.send(AppEvent::Ticker);
                 });

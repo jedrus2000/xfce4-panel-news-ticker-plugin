@@ -1,3 +1,4 @@
+use gdk::keys::constants::f;
 use gtk::prelude::*;
 use webkit2gtk::{
     traits::{SettingsExt, WebContextExt, WebViewExt},
@@ -5,6 +6,7 @@ use webkit2gtk::{
 };
 use webkit2gtk::ffi::{webkit_settings_new, WebKitSettings, WebKitSettingsClass};
 use crate::app;
+use crate::app::AppEvent;
 
 #[derive(Shrinkwrap)]
 pub struct Ticker {
@@ -46,13 +48,11 @@ impl Ticker {
                 child.destroy();
             }
         }
-        let context = WebContext::default().unwrap();
-
         let my_box = gtk::Box::new(gtk::Orientation::Horizontal, 1);
         let start_box = gtk::Box::new(gtk::Orientation::Horizontal, 1);
         start_box.set_size_request(*width, -1);
         my_box.pack_start(&start_box, true, true, 1);
-        my_box.set_events(gdk::EventMask::ENTER_NOTIFY_MASK);
+
         // text = GLib.markup_escape_text('<span foreground="blue" style="italic">Test</span>')
         for item in items {
             let title = format!("<a href=\"{}\" title=\"\">{}</a>",
@@ -60,46 +60,33 @@ impl Ticker {
             eprintln!("{:?}", item);
             let my_label = gtk::Label::builder()
                 .use_markup(true)
-                .events(gdk::EventMask::ENTER_NOTIFY_MASK)
-                .events(gdk::EventMask::LEAVE_NOTIFY_MASK)
-                // .tooltip_text("test")
                 .build();
             my_label.set_markup(title.as_str());
+            my_label.set_track_visited_links(true);
             my_label.set_has_tooltip(true);
 
             let text = item.description.clone().unwrap().to_owned();
+            let tx_tooltip = app.tx.clone();
             my_label.connect_query_tooltip(move |label, x, y, keyboard_mode, tooltip| {
-                // let window = gtk::Window::new(gtk::WindowType::Popup);
+                tx_tooltip.send(AppEvent::StopMoving);
                 let webview =
                     WebView::new();
                 let settings = WebViewExt::settings(&webview).unwrap();
                 settings.set_default_font_size(10);
+                settings.set_enable_accelerated_2d_canvas(true);
                 webview.load_html(text.as_str(), None);
-                // window.add(&webview);
-                // window.move_(x, y);
                 webview.set_size_request(500, 200);
-                // window.show_all();
                 webview.show_all();
                 tooltip.set_custom(Some(&webview));
-                // tooltip.set_custom(Some(&window));
-                // eprintln!("Setting tooltip !");
-                true
+                false
             });
+            let tx_leave_notify = app.tx.clone();
             my_label.connect_leave_notify_event(move |label, _event| {
-                println!("Leave notify event received for label {:?}", label);
+                eprintln!("Leave notify event received for label {:?} {:?}", label, _event);
+                tx_leave_notify.send(AppEvent::StartMoving);
                 gtk::Inhibit(false)
             });
-            my_label.connect_enter_notify_event(move |label, _event| {
-                println!("Enter notify event received for label {:?}", label);
-                gtk::Inhibit(false)
-            });
-            // my_label.set_label(item.title.clone().unwrap().as_str());
-            // my_label.set_tooltip_markup(Some(item.description.clone().unwrap().as_str()));
-            /*
-            my_label.set_events(Gdk.EventMask.ENTER_NOTIFY_MASK)
-            my_label.connect("enter-notify-event", self.on_label_enter)
-            my_label.connect("leave-notify-event", self.on_label_leave)
-            */
+
             my_box.pack_start(&my_label, true, true, 1);
         };
         let end_box = gtk::Box::new(gtk::Orientation::Horizontal, 1);
