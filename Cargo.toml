@@ -27,5 +27,5 @@ reqwest = { version = "0.11.14" }
 tokio = { version = "1.25.0", features = ["macros", "rt-multi-thread"] }
 futures = { version = "0.3.26", features = ["executor"] }
 shrinkwraprs = "0.3.0"
-webkit2gtk = { version = "0.19.2", features = ["v2_6"] }
+webkit2gtk = { version = "0.19.2", features = ["v2_6", "v2_22"] }
 

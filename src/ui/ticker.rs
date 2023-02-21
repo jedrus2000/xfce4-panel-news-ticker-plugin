@@ -1,9 +1,10 @@
+use gdk::EventMask;
 use gdk::keys::constants::f;
+use glib::translate::{from_glib, ToGlibPtr};
 use gtk::prelude::*;
-use webkit2gtk::{
-    traits::{SettingsExt, WebContextExt, WebViewExt},
-    WebContext, WebView,
-};
+use gtk::ResizeMode;
+use libc::c_double;
+use webkit2gtk::{JavascriptResult, LoadEvent, traits::{SettingsExt, WebContextExt, WebViewExt}, WebContext, WebView, WindowPropertiesExt};
 use webkit2gtk::ffi::{webkit_settings_new, WebKitSettings, WebKitSettingsClass};
 use crate::app;
 use crate::app::AppEvent;
@@ -63,9 +64,9 @@ impl Ticker {
                 .build();
             my_label.set_markup(title.as_str());
             my_label.set_track_visited_links(true);
-            my_label.set_has_tooltip(true);
+            my_label.set_events(EventMask::ENTER_NOTIFY_MASK | EventMask::LEAVE_NOTIFY_MASK);
 
-            let text = item.description.clone().unwrap().to_owned();
+            let text = format!("<!DOCTYPE html><html><body>{}</body></html>", item.description.clone().unwrap());
             let tx_tooltip = app.tx.clone();
             my_label.connect_query_tooltip(move |label, x, y, keyboard_mode, tooltip| {
                 tx_tooltip.send(AppEvent::StopMoving);
@@ -74,15 +75,42 @@ impl Ticker {
                 let settings = WebViewExt::settings(&webview).unwrap();
                 settings.set_default_font_size(10);
                 settings.set_enable_accelerated_2d_canvas(true);
-                webview.load_html(text.as_str(), None);
-                webview.set_size_request(500, 200);
-                webview.show_all();
                 tooltip.set_custom(Some(&webview));
-                false
+                webview.connect_load_changed(move |webview, load_event| {
+                    if load_event == LoadEvent::Finished {
+                        let mut width : i32 = 500;
+                        let mut height : i32 = 200;
+                        let js = "document.body.scrollHeight;";
+                        webview.run_javascript(js, gio::Cancellable::NONE, move |result| {
+                            if let Ok(js_value) = result {
+                                height = js_value.js_value().unwrap().to_string().parse::<i32>().unwrap();
+                                // eprintln!("Height: {:?} {:?}", height, js_value.js_value().unwrap().to_string());
+                            }
+                        });
+                        let js = "document.body.scrollWidth;";
+                        webview.run_javascript(js, gio::Cancellable::NONE, move |result| {
+                            if let Ok(js_value) = result {
+                                width = js_value.js_value().unwrap().to_string().parse::<i32>().unwrap();
+                                // eprintln!("Width: {:?}", width);
+                            }
+                        });
+                        webview.set_size_request(width, height);
+                    }
+                });
+                webview.load_html(text.as_str(), None);
+                webview.set_margin(0);
+                true
             });
             let tx_leave_notify = app.tx.clone();
             my_label.connect_leave_notify_event(move |label, _event| {
                 tx_leave_notify.send(AppEvent::StartMoving);
+                // eprintln!("leave");
+                gtk::Inhibit(false)
+            });
+            let tx_enter_notify = app.tx.clone();
+            my_label.connect_enter_notify_event(move | label, _ | {
+                tx_enter_notify.send(AppEvent::StopMoving);
+                // eprintln!("enter");
                 gtk::Inhibit(false)
             });
 
