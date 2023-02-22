@@ -56,7 +56,7 @@ impl Ticker {
 
         // text = GLib.markup_escape_text('<span foreground="blue" style="italic">Test</span>')
         for item in items {
-            let title = format!("<a href=\"{}\" title=\"\">{}</a>",
+            let title = format!("<span>     </span><a href=\"{}\" title=\"\">{}</a>",
                 item.link.clone().unwrap(), item.title.clone().unwrap() );
             eprintln!("{:?}", item);
             let my_label = gtk::Label::builder()
