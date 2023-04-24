@@ -41,7 +41,7 @@ impl Feed {
         // eprintln!("{:?}", content);
         let channel = match content {
             Err(err) => {
-                Err(("ErrorType::UrlRequestError(err)"))
+                Err("ErrorType::UrlRequestError(err)")
             }
             Ok(content) => {
                 let bytes = content.bytes().await.unwrap();
