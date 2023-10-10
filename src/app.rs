@@ -1,3 +1,4 @@
+use std::env;
 use std::time::Duration;
 use crate::state::{State, StateEvent};
 use crate::gui::{Gui, GuiEvent};
@@ -124,6 +125,7 @@ impl App {
     }
 
     pub fn start (pointer: XfcePanelPluginPointer) {
+        env::set_var("WEBKIT_DISABLE_COMPOSITING_MODE", "1");
         let (tx, rx) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
         let mut app = App::new(pointer, tx.clone());
         let plugin = XfcePanelPlugin::from(pointer);

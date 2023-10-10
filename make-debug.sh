@@ -1,4 +1,6 @@
 #!/bin/sh
+cargo build
+
 main=newstickerplugin
 
 gcc -Wall -shared -o lib${main}.so -fPIC src/plugin.c\
