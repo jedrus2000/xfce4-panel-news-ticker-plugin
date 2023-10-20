@@ -61,15 +61,16 @@ impl Ticker {
             eprintln!("{:?}", item);
             let my_label = gtk::Label::builder()
                 .use_markup(true)
+                .single_line_mode(true)
                 .build();
             my_label.set_markup(title.as_str());
             my_label.set_track_visited_links(true);
             my_label.set_events(EventMask::ENTER_NOTIFY_MASK | EventMask::LEAVE_NOTIFY_MASK);
 
             let text = format!("<!DOCTYPE html><html><body>{}</body></html>", item.description.clone().unwrap());
-            let tx_tooltip = app.tx.clone();
+            // let tx_tooltip = app.tx.clone();
             my_label.connect_query_tooltip(move |label, x, y, keyboard_mode, tooltip| {
-                tx_tooltip.send(AppEvent::StopMoving);
+                // let tx_inner = tx_tooltip.clone();
                 let webview =
                     WebView::new();
                 let settings = WebViewExt::settings(&webview).unwrap();
@@ -78,40 +79,46 @@ impl Ticker {
                 tooltip.set_custom(Some(&webview));
                 webview.connect_load_changed(move |webview, load_event| {
                     if load_event == LoadEvent::Finished {
+                        // eprintln!("Stop becouse of tooltip");
+                        // tx_inner.send(AppEvent::StopMoving);
                         let mut width : i32 = 500;
                         let mut height : i32 = 200;
+
                         let js = "document.body.scrollHeight;";
                         webview.run_javascript(js, gio::Cancellable::NONE, move |result| {
                             if let Ok(js_value) = result {
                                 height = js_value.js_value().unwrap().to_string().parse::<i32>().unwrap();
-                                // eprintln!("Height: {:?} {:?}", height, js_value.js_value().unwrap().to_string());
+                                // eprintln!("New Height: {:?}", height);
                             }
                         });
                         let js = "document.body.scrollWidth;";
                         webview.run_javascript(js, gio::Cancellable::NONE, move |result| {
                             if let Ok(js_value) = result {
                                 width = js_value.js_value().unwrap().to_string().parse::<i32>().unwrap();
-                                // eprintln!("Width: {:?}", width);
+                                // eprintln!("New Width: {:?}", width);
                             }
                         });
+
                         webview.set_size_request(width, height);
+                        // eprintln!("width = {}, height = {}", width, height);
                     }
                 });
                 webview.load_html(text.as_str(), None);
                 webview.set_margin(0);
                 true
             });
+
             let tx_leave_notify = app.tx.clone();
             my_label.connect_leave_notify_event(move |label, _event| {
-                tx_leave_notify.send(AppEvent::StartMoving);
                 // eprintln!("leave");
-                gtk::Inhibit(false)
+                tx_leave_notify.send(AppEvent::StartMoving);
+                gtk::Inhibit(true)
             });
             let tx_enter_notify = app.tx.clone();
             my_label.connect_enter_notify_event(move | label, _ | {
-                tx_enter_notify.send(AppEvent::StopMoving);
                 // eprintln!("enter");
-                gtk::Inhibit(false)
+                tx_enter_notify.send(AppEvent::StopMoving);
+                gtk::Inhibit(true)
             });
 
             my_box.pack_start(&my_label, true, true, 1);

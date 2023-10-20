@@ -69,9 +69,11 @@ impl App {
             }
              */
             AppEvent::StopMoving => {
+                // eprintln!("stop");
                 self.stop = true;
             }
             AppEvent::StartMoving => {
+                // eprintln!("start");
                 self.stop = false;
             }
             AppEvent::Ticker => {

@@ -53,7 +53,7 @@ impl Feed {
         channel.unwrap()
     }
     pub fn fetch_feed(state: &State) -> Self {
-        let inputs = vec!["https://rsshub.app/telegram/channel/KyivIndependent_official"];
+        let inputs = vec!["https://www.ukrinform.net/rss/block-lastnews"]; // https://uaposition.com/feed/
         let mut results: Vec<Channel> =
             tokio::runtime::Runtime::new()
                 .unwrap()

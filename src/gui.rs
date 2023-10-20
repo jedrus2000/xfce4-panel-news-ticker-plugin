@@ -109,10 +109,10 @@ impl Gui {
     }
 
     pub fn move_ticker(app: &mut App) {
-        let width: i32 = app.config.width;
         if app.gui.stop {
             return
         }
+        let width: i32 = app.config.width;
         let h_adj = app.gui.ticker.viewport.hadjustment().unwrap();
         // missing h_adj.thaw_notify(); let _ = h_adj.freeze_notify();
         let mut n = h_adj.upper() - width as f64;
@@ -124,6 +124,7 @@ impl Gui {
             // we've reached the end.  reset the marquee to the 0-position.
             app.counter = 0;
         }
+        // eprintln!("app.counter {}", app.counter);
         h_adj.set_value(app.counter as f64);
     }
 
