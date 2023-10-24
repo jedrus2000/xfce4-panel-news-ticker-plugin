@@ -24,7 +24,7 @@ use crate::{
 };
 
 #[no_mangle]
-pub extern "C" fn constructor(pointer: XfcePanelPluginPointer) {
+pub extern "C" fn rust_constructor(pointer: XfcePanelPluginPointer) {
     if gtk::init().is_err() {
         println!("Failed to initialize GTK.");
         return;

@@ -11,6 +11,9 @@ repository = "https://github.com/jedrus2000/xfce4-panel-news-ticker-plugin"
 name = "rsnewstickerplugin"
 crate-type = ["staticlib", "cdylib"]
 
+[build-dependencies]
+cc = "1.0"
+
 [dependencies]
 libc = "0.2"
 gtk = "0.16.2"
