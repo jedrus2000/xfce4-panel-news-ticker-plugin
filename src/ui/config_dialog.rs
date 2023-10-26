@@ -31,9 +31,7 @@ pub struct ConfigDialog {
 
 impl ConfigDialog {
     pub fn new (parent: &gtk::Window) -> Self {
-        let dialog = gtk::Dialog::new();
-        /*
-        new_with_buttons(
+        let dialog = gtk::Dialog::with_buttons(
             Some("Rss Plugin Configuration"),
             Some(parent),
             gtk::DialogFlags::DESTROY_WITH_PARENT,
@@ -51,9 +49,9 @@ impl ConfigDialog {
         notebook.show();
         notebook.set_size_request(500,300);
         notebook.add(&container);
-        */
+
         let feed_tab = FeedTab::new();
-        /*
+
         notebook.add(feed_tab.as_widget());
         notebook.set_tab_label(feed_tab.as_widget(), Some(&feed_tab.title()));
 
@@ -61,39 +59,33 @@ impl ConfigDialog {
         notebook_tab_label.show();
         notebook.set_tab_label(&container, Some(&notebook_tab_label));
     
-        dialog.get_content_area().add(&notebook);
+        dialog.content_area().add(&notebook);
     
         dialog.connect_response(|dialog, response| {
             match response {
                 gtk::ResponseType::Accept => {},
-                _ => {dialog.destroy();}
+                _ => unsafe {dialog.destroy();}
             }
         });
-        */
+
         let location_label = gtk::Label::new(Some("No save location found. Config might not be preserved"));
         location_label.show();
         let active = gtk::CheckButton::builder()
             .label("Active")
             .name("active")
             .build();
-        /*
         active.show();
-        */
         let preserve_items = gtk::CheckButton::builder()
             .label("Preserve items")
             .name("preserve-items")
             .build();
-        /*
         preserve_items.show();
-        */
         let polling_interval = PollingInterval::new();
-        /*
+
         container.add(&location_label);
         container.add(&active);
         container.add(&preserve_items);
         container.add(polling_interval.as_widget());
-        */
-        
 
         ConfigDialog {
             dialog,

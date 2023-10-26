@@ -8,8 +8,8 @@ use crate::feed::{FeedEvent};
 use crate::ui;
 use crate::ui::{
     about_dialog::AboutDialog,
-    /*
     config_dialog::ConfigDialog,
+    /*
     feed_dialog::FeedDialog
      */
 };
@@ -45,8 +45,8 @@ pub struct Gui {
     pub panel_icon: ui::panel_icon::PanelIcon,
     */
     pub about_dialog: Option<AboutDialog>,
-    /*
     pub config_dialog: Option<ConfigDialog>,
+    /*
     pub feed_dialog: Option<FeedDialog>,
      */
     menu_item_error_message: gtk::MenuItem,
@@ -92,8 +92,8 @@ impl Gui {
             /*
             panel_icon,
             icons: icon::IconSet::new(30),
-            config_dialog: None,
             */
+            config_dialog: None,
             about_dialog: None,
             /*
             feed_dialog: None,
@@ -350,7 +350,6 @@ impl Gui {
     }
 
     pub fn open_configure(app: &mut App) {
-        /*
         let dialog = ConfigDialog::new(&app.gui.window);
         dialog.update(app);
         {
@@ -365,24 +364,22 @@ impl Gui {
                 tx.send(AppEvent::GuiEvent(GuiEvent::Destroyed(Dialog::Config))).unwrap();
             });
         }
+        /*
         {
             let tx = app.tx.clone();
             dialog.connect_test_feed(move |_| {
                 tx.send(AppEvent::FeedEvent(FeedEvent::Test)).unwrap();
             });
         }
-        
+        */
         dialog.show();
         app.gui.config_dialog = Some(dialog);
 
         // app.dispatch(AppEvent::ConfigEvent(ConfigEvent::Load));
-         */
     }
 
     pub fn cleanup_configure(app: &mut App) {
-        /*
         app.gui.config_dialog = None;
-         */
     }
 
 }
