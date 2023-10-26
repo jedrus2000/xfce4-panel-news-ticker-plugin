@@ -1,6 +1,5 @@
 
 use gtk::Window;
-use gtk::Dialog;
 use gtk::Entry;
 use gtk::ToggleButton;
 use gtk::Widget;
@@ -14,7 +13,7 @@ use gtk::CheckButton;
 use crate::app::App;
 
 use gtk::prelude::*;
-use gtk::{ListStore, TreeViewColumn};
+use gtk::{Dialog, Builder, ListStore, TreeViewColumn};
 
 
 #[derive(Shrinkwrap)]
@@ -31,6 +30,11 @@ pub struct ConfigDialog {
 
 impl ConfigDialog {
     pub fn new (parent: &gtk::Window) -> Self {
+        let glade_src = include_str!("./glade/configuration.glade");
+        let builder = Builder::from_string(glade_src);
+        let dialog: Dialog = builder.object("configuration_dialog").expect("Couldn't get dialog");
+        dialog.set_parent(parent);
+        /*
         let dialog = gtk::Dialog::with_buttons(
             Some("Rss Plugin Configuration"),
             Some(parent),
@@ -40,6 +44,7 @@ impl ConfigDialog {
                 ("gtk-save", gtk::ResponseType::Accept)
             ]
         );
+         */
         dialog.set_position(gtk::WindowPosition::Center);
         dialog.set_icon_name(Some("xfce4-settings"));
 
@@ -58,9 +63,9 @@ impl ConfigDialog {
         let notebook_tab_label = gtk::Label::new(Some("General"));
         notebook_tab_label.show();
         notebook.set_tab_label(&container, Some(&notebook_tab_label));
-    
+        /*
         dialog.content_area().add(&notebook);
-    
+        */
         dialog.connect_response(|dialog, response| {
             match response {
                 gtk::ResponseType::Accept => {},

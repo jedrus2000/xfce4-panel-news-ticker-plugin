@@ -114,7 +114,7 @@ impl Gui {
         }
         let width: i32 = app.config.width;
         let h_adj = app.gui.ticker.viewport.hadjustment().unwrap();
-        // missing h_adj.thaw_notify(); let _ = h_adj.freeze_notify();
+        let notify_guard = h_adj.freeze_notify();
         let mut n = h_adj.upper() - width as f64;
         if n < 1.0 {
             // safety incase we don't have an actual width calculated width
@@ -126,6 +126,7 @@ impl Gui {
         }
         // eprintln!("app.counter {}", app.counter);
         h_adj.set_value(app.counter as f64);
+        std::mem::drop(notify_guard);
     }
 
     pub fn reducer(app: &mut App, event: AppEvent) {
