@@ -13,7 +13,9 @@ use gtk::CheckButton;
 use crate::app::App;
 
 use gtk::prelude::*;
-use gtk::{Dialog, Builder, ListStore, TreeViewColumn};
+use glib::{clone, Value, ToSendValue};
+use glib_sys::gboolean;
+use gtk::{Dialog, Builder, ListStore, TreeViewColumn, TreeView};
 
 
 #[derive(Shrinkwrap)]
@@ -33,6 +35,22 @@ impl ConfigDialog {
         let glade_src = include_str!("./glade/configuration.glade");
         let builder = Builder::from_string(glade_src);
         let dialog: Dialog = builder.object("configuration_dialog").expect("Couldn't get dialog");
+        let list_store: ListStore = builder.object("feeds_list_store").expect("Couldn't get object");
+        let list_view: TreeView = builder.object("list_view").expect("Couldn't get object");
+        let add_row_btn: Button = builder.object("add_row_btn").expect("Couldn't get object");
+        let delete_row_btn: Button = builder.object("delete_row_btn").expect("Couldn't get object");
+        add_row_btn.connect_clicked(clone!(@strong list_store => move |_| {
+            let iter = list_store.append();
+            list_store.set_value(&iter, 0, &glib::Value::from(""));
+            list_store.set_value(&iter, 1, &glib::Value::from(&true));
+            list_store.set_value(&iter, 2, &glib::Value::from(&30));
+        }));
+        delete_row_btn.connect_clicked(clone!(@strong list_view, @strong list_store => move |_| {
+            let selection = list_view.selection();
+            if let Some((tree_model, iter)) = selection.selected() {
+                list_store.remove(&iter);
+            }
+        }));
         dialog.set_parent(parent);
         /*
         let dialog = gtk::Dialog::with_buttons(
