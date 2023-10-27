@@ -58,7 +58,7 @@ impl Ticker {
         for item in items {
             let title = format!("<span>     </span><a href=\"{}\" title=\"\">{}</a>",
                 item.link.clone().unwrap(), item.title.clone().unwrap() );
-            eprintln!("{:?}", item);
+            // eprintln!("{:?}", item);
             let my_label = gtk::Label::builder()
                 .use_markup(true)
                 .single_line_mode(true)
@@ -67,7 +67,14 @@ impl Ticker {
             my_label.set_track_visited_links(true);
             my_label.set_events(EventMask::ENTER_NOTIFY_MASK | EventMask::LEAVE_NOTIFY_MASK);
 
-            let text = format!("<!DOCTYPE html><html><body>{}</body></html>", item.description.clone().unwrap());
+            let text = match item.description.clone() {
+                None => {
+                    String::new()
+                }
+                Some(s) => {
+                    format!("<!DOCTYPE html><html><body>{}</body></html>", s)
+                }
+            };
             // let tx_tooltip = app.tx.clone();
             my_label.connect_query_tooltip(move |label, x, y, keyboard_mode, tooltip| {
                 // let tx_inner = tx_tooltip.clone();

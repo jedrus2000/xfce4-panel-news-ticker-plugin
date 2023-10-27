@@ -41,16 +41,43 @@ impl Feed {
         // eprintln!("{:?}", content);
         let channel = match content {
             Err(err) => {
-                Err("ErrorType::UrlRequestError(err)")
+                Err(format!("Failed to connect site. Error: {}", err))
             }
             Ok(content) => {
                 let bytes = content.bytes().await.unwrap();
                 let cursor = std::io::Cursor::new(bytes);
                 rss::Channel::read_from(std::io::BufReader::new(cursor))
-                    .map_err(|err| "Cos")
+                    .map_err(|err| {
+                        format!("Failed to read feed content for {}", url)
+                    })
             }
         };
-        channel.unwrap()
+        match channel {
+            Err(err) => {
+                let mut ch = rss::Channel::default();
+                let item = rss::Item {
+                    title: Some(String::from(err)),
+                    link: Some(String::from("")),
+                    description: None,
+                    author: None,
+                    categories: vec![],
+                    comments: None,
+                    enclosure: None,
+                    guid: None,
+                    pub_date: None,
+                    source: None,
+                    content: None,
+                    extensions: Default::default(),
+                    itunes_ext: None,
+                    dublin_core_ext: None,
+                };
+                ch.items.push(item);
+                ch
+            }
+            Ok(ch) => {
+                ch
+            }
+        }
     }
     pub fn fetch_feed(state: &State) -> Self {
         let inputs = vec!["https://www.ukrinform.net/rss/block-lastnews"]; // https://uaposition.com/feed/

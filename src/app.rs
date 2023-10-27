@@ -130,7 +130,7 @@ impl App {
         env::set_var("WEBKIT_DISABLE_COMPOSITING_MODE", "1");
         let (tx, rx) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
         let mut app = App::new(pointer, tx.clone());
-        let plugin = XfcePanelPlugin::from(pointer);
+        let mut plugin = XfcePanelPlugin::from(pointer);
         eprintln!("{}", plugin.save_location(true).unwrap());
         app.dispatch(AppEvent::Init);
         app.dispatch(AppEvent::Ticker);

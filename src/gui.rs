@@ -61,7 +61,6 @@ impl Gui {
         let mut plugin = XfcePanelPlugin::from(pointer);
 
         let plugin_container = plugin.container.clone();
-
         let window: gtk::Window = plugin_container.parent().unwrap().downcast().unwrap();
 
         let ticker = ui::ticker::Ticker::new(config.width);
