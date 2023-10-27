@@ -1,21 +1,9 @@
 
-use gtk::Window;
-use gtk::Entry;
-use gtk::ToggleButton;
-use gtk::Widget;
-use gtk::Label;
-use gtk::Container;
-use gtk::Button;
-use gtk::TextBuffer;
-use gtk::TextView;
-use gtk::Notebook;
-use gtk::CheckButton;
 use crate::app::App;
 
 use gtk::prelude::*;
-use glib::{clone, Value, ToSendValue};
-use glib_sys::gboolean;
-use gtk::{Dialog, Builder, ListStore, TreeViewColumn, TreeView};
+use glib::{clone};
+use gtk::{Dialog, Builder, ListStore, TreeViewColumn, TreeView, Button};
 
 
 #[derive(Shrinkwrap)]
