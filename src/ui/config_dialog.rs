@@ -3,19 +3,15 @@ use crate::app::App;
 
 use gtk::prelude::*;
 use glib::{clone};
-use gtk::{Dialog, Builder, ListStore, TreeViewColumn, TreeView, Button};
+use gtk::{Dialog, Builder, ListStore, TreeViewColumn, TreeView, Button, Entry};
 
 
 #[derive(Shrinkwrap)]
 pub struct ConfigDialog {
     #[shrinkwrap(main_field)]
     dialog: gtk::Dialog,
-    location_label: gtk::Label,
-    active: gtk::CheckButton,
-    preserve_items: gtk::CheckButton,
-    feed_tab: FeedTab,
-    polling_interval: PollingInterval
-
+    list_store: ListStore,
+    ticker_speed_pixels: Entry
 }
 
 impl ConfigDialog {
@@ -24,6 +20,7 @@ impl ConfigDialog {
         let builder = Builder::from_string(glade_src);
         let dialog: Dialog = builder.object("configuration_dialog").expect("Couldn't get dialog");
         let list_store: ListStore = builder.object("feeds_list_store").expect("Couldn't get object");
+        let ticker_speed_pixels: Entry = builder.object("ticker_speed_pixels").expect("Couldn't get object");
         let list_view: TreeView = builder.object("list_view").expect("Couldn't get object");
         let add_row_btn: Button = builder.object("add_row_btn").expect("Couldn't get object");
         let delete_row_btn: Button = builder.object("delete_row_btn").expect("Couldn't get object");
@@ -39,72 +36,20 @@ impl ConfigDialog {
                 list_store.remove(&iter);
             }
         }));
-        dialog.set_parent(parent);
-        /*
-        let dialog = gtk::Dialog::with_buttons(
-            Some("Rss Plugin Configuration"),
-            Some(parent),
-            gtk::DialogFlags::DESTROY_WITH_PARENT,
-            &[
-                ("gtk-close", gtk::ResponseType::Close),
-                ("gtk-save", gtk::ResponseType::Accept)
-            ]
-        );
-         */
-        dialog.set_position(gtk::WindowPosition::Center);
-        dialog.set_icon_name(Some("xfce4-settings"));
-
-        let container = gtk::Box::new(gtk::Orientation::Vertical, 2);
-        container.show();
-        let notebook = gtk::Notebook::new();
-        notebook.show();
-        notebook.set_size_request(500,300);
-        notebook.add(&container);
-
-        let feed_tab = FeedTab::new();
-
-        notebook.add(feed_tab.as_widget());
-        notebook.set_tab_label(feed_tab.as_widget(), Some(&feed_tab.title()));
-
-        let notebook_tab_label = gtk::Label::new(Some("General"));
-        notebook_tab_label.show();
-        notebook.set_tab_label(&container, Some(&notebook_tab_label));
-        /*
-        dialog.content_area().add(&notebook);
-        */
         dialog.connect_response(|dialog, response| {
             match response {
                 gtk::ResponseType::Accept => {},
                 _ => unsafe {dialog.destroy();}
             }
         });
-
-        let location_label = gtk::Label::new(Some("No save location found. Config might not be preserved"));
-        location_label.show();
-        let active = gtk::CheckButton::builder()
-            .label("Active")
-            .name("active")
-            .build();
-        active.show();
-        let preserve_items = gtk::CheckButton::builder()
-            .label("Preserve items")
-            .name("preserve-items")
-            .build();
-        preserve_items.show();
-        let polling_interval = PollingInterval::new();
-
-        container.add(&location_label);
-        container.add(&active);
-        container.add(&preserve_items);
-        container.add(polling_interval.as_widget());
+        dialog.set_parent(parent);
+        dialog.set_position(gtk::WindowPosition::Center);
+        dialog.set_icon_name(Some("xfce4-settings"));
 
         ConfigDialog {
             dialog,
-            location_label,
-            feed_tab,
-            active,
-            preserve_items,
-            polling_interval
+            list_store,
+            ticker_speed_pixels
         }
     }
 
