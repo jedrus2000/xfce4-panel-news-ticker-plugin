@@ -2,6 +2,28 @@
 <!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
+  <object class="GtkListStore" id="feeds_list_store">
+    <columns>
+      <!-- column-name url -->
+      <column type="gchararray"/>
+      <!-- column-name editable -->
+      <column type="gboolean"/>
+      <!-- column-name poll_frequency -->
+      <column type="gint"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">http://test1</col>
+        <col id="1">True</col>
+        <col id="2">30</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">http://test2</col>
+        <col id="1">True</col>
+        <col id="2">30</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkDialog" id="configuration_dialog">
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">Properites</property>
@@ -183,7 +205,7 @@
                                   <object class="GtkTreeViewColumn">
                                     <property name="resizable">True</property>
                                     <property name="sizing">fixed</property>
-                                    <property name="title" translatable="yes">Poll freq. (minutes)</property>
+                                    <property name="title" translatable="yes">Polling interval (minutes)</property>
                                     <child>
                                       <object class="GtkCellRendererText"/>
                                       <attributes>
@@ -301,27 +323,5 @@
       <action-widget response="-3">button1</action-widget>
       <action-widget response="-6">button2</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkListStore" id="feeds_list_store">
-    <columns>
-      <!-- column-name url -->
-      <column type="gchararray"/>
-      <!-- column-name editable -->
-      <column type="gboolean"/>
-      <!-- column-name poll_frequency -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">http://test1</col>
-        <col id="1">True</col>
-        <col id="2">30</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">http://test2</col>
-        <col id="1">True</col>
-        <col id="2">30</col>
-      </row>
-    </data>
   </object>
 </interface>

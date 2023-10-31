@@ -17,42 +17,15 @@ pub enum ConfigEvent {
 }
 
 #[derive(Debug, Clone)]
-pub enum RequestMethod {
-    Get, Post
+pub struct FeedUrl {
+    pub url: String,
+    pub polling_interval: u32, // minutes
 }
-impl From<&str> for RequestMethod {
-    fn from(value: &str) -> RequestMethod {
-        match value {
-            "GET" => RequestMethod::Get,
-            "POST" => RequestMethod::Post,
-            _ => RequestMethod::Get
-        }
-    }
-}
-impl std::fmt::Display for RequestMethod {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self {
-            RequestMethod::Get => {
-                write!(f, "{}", "GET")
-            },
-            RequestMethod::Post => {
-                write!(f, "{}", "POST")
-            }
-        }
-    }
-}
-
 
 #[derive(Debug, Clone)]
 pub struct Config {
-    loaded: bool,
-    pub active: bool,
-    pub preserve_items: bool,
-    pub feed: String,
-    pub feed_headers: Vec<(String, String)>,
-    pub feed_request_method: RequestMethod,
-    pub feed_request_body: Option<String>,
-    pub polling_interval: u32,
+    pub feeds_urls: Vec<FeedUrl>,
+    pub ticker_speed: u32, // pixels
     pub width: i32,
     pub save_location: Option<String>,
 }
@@ -60,14 +33,8 @@ pub struct Config {
 impl Default for Config {
     fn default () -> Self {
         Config {
-            loaded: false,
-            active: false,
-            preserve_items: false,
-            feed: String::default(),
-            feed_headers: Vec::new(),
-            feed_request_method: RequestMethod::Get,
-            feed_request_body: None,
-            polling_interval: u32::default(),
+            feeds_urls: Vec::new(),
+            ticker_speed: 1, // pixels
             save_location: None,
             width: 1920
         }
@@ -97,34 +64,18 @@ impl Config {
 
     pub fn load(app: &mut App) {
         if let Some(rc_file) = &app.config.save_location {
-            let (feed, active, interval, preserve_items, header_list, request_method, request_body) = rc_simple(rc_file, |rc| {
+            let (feeds_urls, ticker_speed) = rc_simple(rc_file, |rc| {
                 (
-                    read_entry(rc, "feed", "").clone(),
-                    read_bool_entry(rc, "active", false),
-                    std::convert::TryInto::try_into(read_int_entry(rc, "polling_interval", 60 * 1000)).unwrap(),
-                    read_bool_entry(rc, "preserve_items", false),
-                    read_list_entry(rc, "feed_headers", ";\n"),
-                    read_entry(rc, "feed_request_method", ""),
-                    read_entry(rc, "feed_request_body", "").clone(),
+                    read_list_entry(rc, "feed_urls", ";\n"),
+                    std::convert::TryInto::try_into(read_int_entry(rc, "ticker_speed", 1)).unwrap(),
                 )
             });
-            app.config.feed = feed;
-            app.config.active = active;
-            app.config.preserve_items = preserve_items;
-            app.config.polling_interval = interval;
-            app.config.feed_headers = header_list.iter().map(|header| {
-                let offset = header.find(':').unwrap_or(header.len());
-                let (name, value) = header.split_at(offset);
-                let mut value = String::from(value);
-                value.remove(0);
-                (String::from(name), value)
+            app.config.ticker_speed = ticker_speed;
+            app.config.feeds_urls = feeds_urls.iter().map(|s| {
+                let offset = s.find(',').unwrap_or(s.len());
+                let (url, polling_interval) = s.split_at(offset);
+                FeedUrl {url: String::from(url), polling_interval: polling_interval.parse().unwrap_or(30)}
             }).collect();
-            app.config.feed_request_method = RequestMethod::from(&request_method[..]);   
-            app.config.feed_request_body = if let RequestMethod::Post = app.config.feed_request_method {
-                Some(request_body)
-            } else {
-                None
-            };
             app.dispatch(AppEvent::ConfigEvent(
                 ConfigEvent::Loaded(true)
             ));
@@ -138,18 +89,9 @@ impl Config {
     pub fn save(app: &mut App) -> bool {
         if let Some(rc_file) = &app.config.save_location {
             rc_simple_mut(rc_file, |rc| {
-                write_entry(rc, "feed", &app.config.feed);
-                write_bool_entry(rc, "active", app.config.active);
-                write_int_entry(rc, "polling_interval", std::convert::TryInto::try_into(app.config.polling_interval).unwrap());
-                write_bool_entry(rc, "preserve_items", app.config.preserve_items);
-                let feed_headers: Vec<String> = app.config.feed_headers.iter().map(|(x,y)| format!("{}:{}",x,y)).collect();
-                write_list_entry(rc, "feed_headers", feed_headers,";\n");
-                write_entry(rc, "feed_request_method", &format!("{}", app.config.feed_request_method));
-                if let Some(body) = &app.config.feed_request_body {
-                    write_entry(rc, "feed_request_body", &body);
-                } else {
-                    delete_entry(rc, "feed_request_body", false);
-                }
+                write_int_entry(rc, "ticker_speed", std::convert::TryInto::try_into(app.config.ticker_speed).unwrap());
+                let urls: Vec<String> = app.config.feeds_urls.iter().map(|feed| format!("{},{}",feed.url, feed.polling_interval)).collect();
+                write_list_entry(rc, "feed_headers", urls,";\n");
             });
             app.dispatch(AppEvent::ConfigEvent(ConfigEvent::Saved(true)));
             return true;
